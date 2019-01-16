@@ -1,19 +1,11 @@
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const { Strategy: JwtStrategy, ExtractJwt } = require("passport-jwt");
+const UserModel = require("./../database/models/user_model");
 
-passport.serializeUser((user, done) => {
-  done(null, user._id);
-});
-
-passport.deserializeUser(async (id, done) => {
-  try {
-    const user = await UserModel.findById(id);
-    done(null, user);
-  } catch (error) {
-    done(error);
-  }
-});
+//passport-local-mongoose helper functions
+passport.serializeUser(UserModel.serializeUser());
+passport.deserializeUser(UserModel.deserializeUser());
 
 passport.use(
   new LocalStrategy(
