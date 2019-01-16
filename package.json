@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "seed": "node database/seeds",
     "dev-server": "nodemon index.js",
     "server": "forever -c \"nodemon --exitcrash -L\" index.js"
   },
@@ -16,7 +17,6 @@
     "express": "^4.16.4",
     "jsonwebtoken": "^8.4.0",
     "mongoose": "^5.4.4",
-    "mongoose-bcrypt": "^1.6.0",
     "morgan": "^1.9.1",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
@@ -24,6 +24,7 @@
     "passport-local-mongoose": "^5.0.1"
   },
   "devDependencies": {
+    "faker": "^4.1.0",
     "forever": "^0.15.3",
     "nodemon": "^1.18.9"
   }
