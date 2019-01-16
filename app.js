@@ -1,6 +1,10 @@
 const express = require("express");
 const app = express();
 const passport = require("./config/passport");
+const morgan = require("morgan")
+
+app.use(passport.initialize());
+
 app.use(morgan("combined"));
 
 app.use(express.urlencoded({ extended: false }));
