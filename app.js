@@ -1,8 +1,5 @@
 const express = require("express");
 const app = express();
-const passport = require("./config/passport");
-const morgan = require("morgan");
-app.use(morgan("combined"));
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());

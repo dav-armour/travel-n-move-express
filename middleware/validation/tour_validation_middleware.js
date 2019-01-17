@@ -5,7 +5,9 @@ module.exports = function validateTour(req, res, next) {
     body: {
       title: Joi.string().required(),
       image: Joi.string().required(),
-      price: Joi.number().required(),
+      price: Joi.number()
+        .positive()
+        .required(),
       description: Joi.string().required(),
       duration: Joi.string().required()
     }
