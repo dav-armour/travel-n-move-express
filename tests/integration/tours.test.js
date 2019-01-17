@@ -170,6 +170,8 @@ describe("SHOW: The user gets a single tour", () => {
     });
     tourJSON = tour.toObject();
     tourJSON._id = tour._id.toString();
+    tourJSON.createdAt = tour.createdAt.toISOString();
+    tourJSON.updatedAt = tour.updatedAt.toISOString();
   });
 
   test("GET /tours/:id responds with corresponding tour object", async () => {
