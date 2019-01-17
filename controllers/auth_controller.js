@@ -1,7 +1,5 @@
 const UserModel = require("./../database/models/user_model");
 const JWTService = require("./../services/jwt_service");
-const passport = require("passport");
-const jwt = require("jsonwebtoken");
 
 //
 function register(req, res, next) {
