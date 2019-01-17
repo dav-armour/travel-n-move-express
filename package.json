@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest tests --watch --coverage",
+    "test": "jest tests --watch",
     "seed": "node database/seeds",
     "dev-server": "nodemon index.js",
     "server": "forever -c \"nodemon --exitcrash -L\" index.js"
@@ -28,6 +28,6 @@
     "forever": "^0.15.3",
     "jest": "^23.6.0",
     "nodemon": "^1.18.9",
-    "supertest": "^3.3.0"
+    "supertest": "^3.4.1"
   }
 }
