@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest tests --watch --coverage",
-    "seed": "node database/seeds",
+    "seeds": "node database/seeds",
     "dev-server": "nodemon index.js",
     "server": "forever -c \"nodemon --exitcrash -L\" index.js"
   },

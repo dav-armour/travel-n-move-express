@@ -1,37 +1,37 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("./../config/passport");
-const validateTour = require("./../middleware/validation/tour_validation_middleware");
-const TourController = require("../controllers/tour_controller");
+const validateQuote = require("./../middleware/validation/quote_validation_middleware");
+const QuoteController = require("../controllers/quote_controller");
 
-router.get("/", TourController.index);
-
-router.post(
+router.get(
   "/",
-  validateTour(),
   passport.authenticate("jwt", { session: false }),
-  TourController.create
+  QuoteController.index
 );
 
-router.get("/:id", TourController.show);
+router.post("/", validateQuote(), QuoteController.create);
+
+router.get("/:id", QuoteController.show);
 
 router.put(
   "/:id",
-  validateTour(),
+  validateQuote(),
   passport.authenticate("jwt", { session: false }),
-  TourController.update
+  QuoteController.update
 );
+
 router.patch(
   "/:id",
-  validateTour(),
+  validateQuote(),
   passport.authenticate("jwt", { session: false }),
-  TourController.update
+  QuoteController.update
 );
 
 router.delete(
   "/:id",
   passport.authenticate("jwt", { session: false }),
-  TourController.destroy
+  QuoteController.destroy
 );
 
 module.exports = router;

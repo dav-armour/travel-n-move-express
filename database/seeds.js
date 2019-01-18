@@ -1,6 +1,5 @@
 const mongoose = require("./connect");
 const TourModel = require("./models/tour_model");
-const UserModel = require("./models/user_model");
 const FlightQuoteModel = require("./models/flight_quote_model");
 const HotelQuoteModel = require("./models/hotel_quote_model");
 const HolidayQuoteModel = require("./models/holiday_quote_model");
@@ -16,7 +15,7 @@ async function createSeeds() {
   const promises = [];
   let tours = [];
   let users = [];
-  promises.push(createTours(), createUsers());
+  promises.push(createTours(), createQuoteUsers());
   await Promise.all(promises)
     .then(response => {
       [tours, users] = response;
@@ -63,13 +62,13 @@ async function createTour() {
   return tour;
 }
 
-async function createUsers(qty = 20) {
+async function createQuoteUsers(qty = 20) {
   const usersArray = [];
   const userPromises = [];
 
   for (let i = 0; i < qty; i++) {
     console.log(`Creating user ${i + 1}`);
-    userPromises.push(createUser());
+    userPromises.push(createQuoteUser());
   }
 
   await Promise.all(userPromises)
@@ -82,13 +81,13 @@ async function createUsers(qty = 20) {
   return usersArray;
 }
 
-async function createUser() {
-  const user = new UserModel({
+async function createQuoteUser() {
+  const user = {
     first_name: faker.name.firstName(),
     last_name: faker.name.lastName(),
     telephone: faker.phone.phoneNumber(),
     email: faker.internet.email()
-  });
+  };
   // await user.setPassword("testing123");
   // await user.save();
   return user;

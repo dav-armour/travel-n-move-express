@@ -2,15 +2,8 @@ const TourModel = require("../database/models/tour_model");
 
 async function create(req, res, next) {
   //logic for creating a resource
-  const { title, image, price, description, duration } = req.body;
   try {
-    const tour = await TourModel.create({
-      title,
-      image,
-      price,
-      description,
-      duration
-    });
+    const tour = await TourModel.create(req.body);
     if (!tour) {
       return next(new HTTPError(422, "Could not create tour"));
     }
@@ -60,17 +53,10 @@ async function show(req, res, next) {
 
 async function update(req, res, next) {
   //updates the resource
-  const { title, image, price, description, duration } = req.body;
   const { id } = req.params;
 
   try {
-    let tour = await TourModel.findByIdAndUpdate(id, {
-      title,
-      image,
-      price,
-      description,
-      duration
-    });
+    let tour = await TourModel.findByIdAndUpdate(id, req.body);
     if (!tour) {
       return next(new HTTPError(400, "Tour ID not found"));
     }

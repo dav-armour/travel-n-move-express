@@ -4,8 +4,7 @@ const FlightQuoteSchema = new Schema({
   seat_type: {
     type: String,
     enum: ["economy", "premium economy", "business", "first class"],
-    required: true,
-    default: "economy"
+    required: true
   },
   origin: {
     type: String,

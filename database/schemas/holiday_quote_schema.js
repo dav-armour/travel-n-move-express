@@ -4,8 +4,7 @@ const HolidayQuoteSchema = new Schema({
   budget_tier: {
     type: String,
     enum: ["budget", "mid-range", "luxury"],
-    required: true,
-    default: "mid-range"
+    required: true
   }
 });
 

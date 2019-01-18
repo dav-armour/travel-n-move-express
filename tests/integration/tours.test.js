@@ -2,15 +2,34 @@ const supertest = require("supertest");
 const app = require("./../../app");
 const mongoose = require("./../../database/connect");
 const TourModel = require("./../../database/models/tour_model");
+const UserModel = require("./../../database/models/user_model");
 const HTTPError = require("./../../errors/HTTPError");
+const JWTService = require("./../../services/jwt_service");
+
+let token;
 
 beforeAll(async () => {
   global.HTTPError = HTTPError;
-  await mongoose.connection.dropDatabase();
+  await UserModel.deleteMany({});
+  await TourModel.deleteMany({});
+  // await mongoose.connection.dropDatabase();
+  // await mongoose.connection.dropCollection("tours");
+  const admin = new UserModel({
+    email: "tour_admin@test.com",
+    telephone: "1234",
+    first_name: "admin",
+    last_name: "admin"
+  });
+  await admin.setPassword("testing123");
+  await admin.save();
+  token = JWTService.createToken(admin);
 });
 
 afterAll(async () => {
-  await mongoose.connection.dropDatabase();
+  await UserModel.deleteMany({});
+  await TourModel.deleteMany({});
+  // await mongoose.connection.dropDatabase();
+  // await mongoose.connection.dropCollection("tours");
   mongoose.disconnect();
 });
 
@@ -42,6 +61,7 @@ describe("CREATE: The user creates a new tour", () => {
     const tourCount = await TourModel.count();
     const response = await supertest(app)
       .post("/tours")
+      .set("Authorization", `Bearer ${token}`)
       .send(tour)
       .expect(201);
     expect(response.body.tour.title).toEqual(tour.title);
@@ -56,6 +76,7 @@ describe("CREATE: The user creates a new tour", () => {
     const tourCount = await TourModel.count();
     const response = await supertest(app)
       .post("/tours")
+      .set("Authorization", `Bearer ${token}`)
       .send(tour)
       .expect(400);
     expect(response.body.message).toBe("Validation Error");
@@ -63,21 +84,42 @@ describe("CREATE: The user creates a new tour", () => {
     const newTourCount = await TourModel.count();
     expect(newTourCount).toBe(tourCount);
   });
+
+  test("POST /tours with an invalid or missing auth token responds with unauthorized", async () => {
+    // bad token
+    let response = await supertest(app)
+      .post("/tours")
+      .set("Authorization", "bad token")
+      .send(tour)
+      .expect(401);
+    expect(response.body).toEqual({});
+    // missing token
+    response = await supertest(app)
+      .post("/tours")
+      .send(tour)
+      .expect(401);
+    expect(response.body).toEqual({});
+  });
 });
 
 // DELETE
 describe("DELETE: The user deletes an tour", () => {
-  test("DELETE /tours/:id deletes the corresponding tour and responds with success", async () => {
-    const tour = await TourModel.create({
+  let tour = {};
+  beforeEach(async () => {
+    tour = await TourModel.create({
       title: "delete",
       image: "delete.png",
       price: 1,
       description: "delete",
       duration: "delete"
     });
+  });
+
+  test("DELETE /tours/:id deletes the corresponding tour and responds with success", async () => {
     const tourCount = await TourModel.count();
     const response = await supertest(app)
       .delete(`/tours/${tour._id}`)
+      .set("Authorization", `Bearer ${token}`)
       .expect(204);
     const newTourCount = await TourModel.count();
     expect(newTourCount).toBe(tourCount - 1);
@@ -87,15 +129,29 @@ describe("DELETE: The user deletes an tour", () => {
   test("DELETE /tours/:id with invalid id returns error", async () => {
     let response = await supertest(app)
       .delete("/tours/test")
+      .set("Authorization", `Bearer ${token}`)
       .expect(500);
 
     response = await supertest(app)
       .delete("/tours/ffffffffffffffffffffffff")
+      .set("Authorization", `Bearer ${token}`)
       .expect(400);
     expect(response.text).toEqual("Tour ID not found");
   });
 
-  // TODO: test for invalid id
+  test("DELETE /tours/:id with invalid or missing token responds with unauthorized", async () => {
+    // bad token
+    let response = await supertest(app)
+      .delete(`/tours/${tour._id}`)
+      .set("Authorization", "bad token")
+      .expect(401);
+    expect(response.body).toEqual({});
+    // missing token
+    response = await supertest(app)
+      .delete(`/tours/${tour._id}`)
+      .expect(401);
+    expect(response.body).toEqual({});
+  });
 });
 
 // UPDATE
@@ -124,6 +180,7 @@ describe("UPDATE: A user edits an existing tour", () => {
     const tourCount = await TourModel.count();
     const response = await supertest(app)
       .put(`/tours/${tour._id}`)
+      .set("Authorization", `Bearer ${token}`)
       .send(editedTour)
       .expect(200);
     const newTourCount = await TourModel.count();
@@ -137,24 +194,43 @@ describe("UPDATE: A user edits an existing tour", () => {
   test("PUT /tours/:id with invalid id returns error", async () => {
     let response = await supertest(app)
       .put(`/tours/test`)
+      .set("Authorization", `Bearer ${token}`)
       .send(editedTour)
       .expect(500);
 
     response = await supertest(app)
       .put("/tours/ffffffffffffffffffffffff")
+      .set("Authorization", `Bearer ${token}`)
       .send(editedTour)
       .expect(400);
     expect(response.text).toEqual("Tour ID not found");
   });
 
-  test("PUT /tours with invalid req body does not update tour and responds with error message", async () => {
+  test("PUT /tours/:id with invalid req body does not update tour and responds with error message", async () => {
     delete editedTour.title;
     const response = await supertest(app)
       .put(`/tours/${tour._id}`)
+      .set("Authorization", `Bearer ${token}`)
       .send(editedTour)
       .expect(400);
     expect(response.body.message).toBe("Validation Error");
     expect(response.body.errors.title).toBe('"title" is required');
+  });
+
+  test("PUT /tours/:id with an invalid or missing auth token responds with unauthorized", async () => {
+    // bad token
+    let response = await supertest(app)
+      .put("/tours/${tour._id}")
+      .set("Authorization", "bad token")
+      .send(editedTour)
+      .expect(401);
+    expect(response.body).toEqual({});
+    // missing token
+    response = await supertest(app)
+      .put("/tours/${tour._id}")
+      .send(editedTour)
+      .expect(401);
+    expect(response.body).toEqual({});
   });
 });
 

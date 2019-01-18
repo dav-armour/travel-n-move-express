@@ -1,14 +1,14 @@
 const { Schema } = require("mongoose");
-const UserSchema = require("./user_schema");
+const QuoteUserSchema = require("./quote_user_schema");
 
 const QuoteSchema = new Schema(
   {
     start_date: {
-      type: String,
+      type: Date,
       required: true
     },
     end_date: {
-      type: String,
+      type: Date,
       required: true
     },
     destination: {
@@ -27,7 +27,7 @@ const QuoteSchema = new Schema(
       type: Boolean,
       required: true
     },
-    user: UserSchema
+    user: QuoteUserSchema
   },
   {
     timestamps: {},
