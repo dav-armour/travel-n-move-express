@@ -5,7 +5,6 @@ const supertest = require("supertest");
 
 //login tests
 describe("login tests", () => {
-  const user = {};
   const userDetails = {
     email: "nat6@test.com",
     telephone: "1234",
@@ -20,22 +19,24 @@ describe("login tests", () => {
   });
 
   test("POST /auth/login with no email and password should return error", async () => {
-    response = await supertest(app)
+    const response = await supertest(app)
       .post("/auth/login")
       .send({
-        email: user.email,
-        password: user.password
+        email: "",
+        password: ""
       })
       .expect(400);
+    expect(response.body.message).toBe("Validation Error");
   });
 
   test("POST /auth/login with valid email and password", async () => {
-    response = await supertest(app)
+    const response = await supertest(app)
       .post("/auth/login")
       .send({
         email: userDetails.email,
         password: "test"
-      })
-      .expect(200);
+      });
+    expect(200);
+    expect(response.body).toBeTruthy();
   });
 });
