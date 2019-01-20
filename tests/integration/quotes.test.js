@@ -38,7 +38,8 @@ beforeAll(async () => {
     adults: 1,
     children: 2,
     flexible_dates: false,
-    user
+    user,
+    comments: "comment"
   };
 });
 

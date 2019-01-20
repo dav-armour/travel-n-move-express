@@ -27,7 +27,8 @@ module.exports = function validateQuote(req, res, next) {
         email: Joi.string()
           .email()
           .required()
-      }
+      },
+      comments: Joi.string()
     };
     if (!req.body) {
       return next(new HTTPError(400, "Missing request body"));

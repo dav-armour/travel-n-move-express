@@ -1,7 +1,6 @@
 const UserModel = require("./../database/models/user_model");
 const JWTService = require("./../services/jwt_service");
 
-//
 function register(req, res, next) {
   const { email, password, first_name, last_name, telephone } = req.body;
   const user = new UserModel({

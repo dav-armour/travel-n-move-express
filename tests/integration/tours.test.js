@@ -12,8 +12,6 @@ beforeAll(async () => {
   global.HTTPError = HTTPError;
   await UserModel.deleteMany({});
   await TourModel.deleteMany({});
-  // await mongoose.connection.dropDatabase();
-  // await mongoose.connection.dropCollection("tours");
   const admin = new UserModel({
     email: "tour_admin@test.com",
     telephone: "1234",
@@ -26,10 +24,8 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await UserModel.deleteMany({});
+  await UserModel.deleteOne({ email: "tour_admin@test.com" });
   await TourModel.deleteMany({});
-  // await mongoose.connection.dropDatabase();
-  // await mongoose.connection.dropCollection("tours");
   mongoose.disconnect();
 });
 

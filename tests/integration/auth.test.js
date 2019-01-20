@@ -29,7 +29,7 @@ describe("login tests", () => {
     expect(response.body.message).toBe("Validation Error");
   });
 
-  test("POST /auth/login with valid email and password", async () => {
+  test("POST /auth/login with valid email and password should return token", async () => {
     const response = await supertest(app)
       .post("/auth/login")
       .send({

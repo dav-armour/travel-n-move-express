@@ -27,7 +27,10 @@ const QuoteSchema = new Schema(
       type: Boolean,
       required: true
     },
-    user: QuoteUserSchema
+    user: QuoteUserSchema,
+    comments: {
+      type: String
+    }
   },
   {
     timestamps: {},
