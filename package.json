@@ -7,12 +7,13 @@
     "test": "jest tests --watch --coverage",
     "seeds": "node database/seeds",
     "dev-server": "nodemon index.js",
-    "server": "forever -c \"nodemon --exitcrash -L\" index.js"
+    "start": "forever -c \"nodemon --exitcrash -L\" index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "celebrate": "^9.0.1",
+    "cors": "^2.8.5",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "jsonwebtoken": "^8.4.0",
