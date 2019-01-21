@@ -1,7 +1,6 @@
 const { Schema } = require("mongoose");
-const passportLocalMongoose = require("passport-local-mongoose");
 
-const UserSchema = new Schema({
+const QuoteUserSchema = new Schema({
   first_name: {
     type: String,
     required: true
@@ -13,9 +12,11 @@ const UserSchema = new Schema({
   telephone: {
     type: String,
     required: true
+  },
+  email: {
+    type: String,
+    required: true
   }
 });
 
-UserSchema.plugin(passportLocalMongoose, { usernameField: "email" });
-
-module.exports = UserSchema;
+module.exports = QuoteUserSchema;
