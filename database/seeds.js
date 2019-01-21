@@ -125,7 +125,8 @@ async function createQuote({ tour, user }) {
     adults: faker.random.number({ min: 1, max: 4 }),
     children: faker.random.number({ min: 0, max: 4 }),
     flexible_dates: faker.random.boolean(),
-    user
+    user,
+    clientComments: faker.lorem.sentence(10)
   };
   const type = faker.random.arrayElement(["Flight", "Hotel", "Holiday"]);
   let quote = {};
@@ -154,7 +155,8 @@ async function createFlightQuote(quoteDetails) {
       "premium economy",
       "business",
       "first class"
-    ])
+    ]),
+    ticket_type: faker.random.arrayElement(["return", "one-way"])
   });
 
   return quote;

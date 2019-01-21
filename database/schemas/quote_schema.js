@@ -28,8 +28,17 @@ const QuoteSchema = new Schema(
       required: true
     },
     user: QuoteUserSchema,
-    comments: {
+    clientComments: {
       type: String
+    },
+    agentComments: {
+      type: String
+    },
+    status: {
+      type: String,
+      enum: ["new", "researching", "pending", "finalized", "declined"],
+      required: true,
+      default: "new"
     }
   },
   {

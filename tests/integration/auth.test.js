@@ -13,9 +13,15 @@ describe("login tests", () => {
   };
 
   beforeAll(async () => {
+    await UserModel.deleteOne({ email: userDetails.email });
     const user = new UserModel(userDetails);
     await user.setPassword("test");
     await user.save();
+  });
+
+  afterAll(async () => {
+    await UserModel.deleteOne({ email: userDetails.email });
+    mongoose.disconnect();
   });
 
   test("POST /auth/login with no email and password should return error", async () => {

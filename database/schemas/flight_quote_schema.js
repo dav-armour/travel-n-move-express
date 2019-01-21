@@ -9,6 +9,11 @@ const FlightQuoteSchema = new Schema({
   origin: {
     type: String,
     required: true
+  },
+  ticket_type: {
+    type: String,
+    enum: ["return", "one-way"],
+    required: true
   }
 });
 

@@ -28,7 +28,15 @@ module.exports = function validateQuote(req, res, next) {
           .email()
           .required()
       },
-      comments: Joi.string()
+      clientComments: Joi.string(),
+      agentComments: Joi.string(),
+      status: Joi.string().valid(
+        "new",
+        "researching",
+        "pending",
+        "finalized",
+        "declined"
+      )
     };
     if (!req.body) {
       return next(new HTTPError(400, "Missing request body"));
@@ -39,6 +47,7 @@ module.exports = function validateQuote(req, res, next) {
           .valid("economy", "premium economy", "business", "first class")
           .required();
         JoiSchema.origin = Joi.string().required();
+        JoiSchema.ticket_type = Joi.string().valid("return", "one-way");
         break;
       case "Holiday":
         JoiSchema.budget_tier = Joi.string()

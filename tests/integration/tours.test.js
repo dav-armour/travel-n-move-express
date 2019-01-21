@@ -10,7 +10,7 @@ let token;
 
 beforeAll(async () => {
   global.HTTPError = HTTPError;
-  await UserModel.deleteMany({});
+  await UserModel.deleteOne({ email: "tour_admin@test.com" });
   await TourModel.deleteMany({});
   const admin = new UserModel({
     email: "tour_admin@test.com",

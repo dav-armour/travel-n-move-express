@@ -39,11 +39,12 @@ beforeAll(async () => {
     children: 2,
     flexible_dates: false,
     user,
-    comments: "comment"
+    clientComments: "comment"
   };
 });
 
 afterAll(async () => {
+  await UserModel.deleteOne({ email: "quote_admin@test.com" });
   QuoteModel.deleteMany({});
   mongoose.disconnect();
 });
@@ -80,7 +81,8 @@ describe("CREATE: The user creates a new flight quote", () => {
       ...quoteDetails,
       type: "Flight",
       origin: "Sydney",
-      seat_type: "economy"
+      seat_type: "economy",
+      ticket_type: "return"
     };
   });
 
@@ -249,14 +251,16 @@ describe("UPDATE: A user edits an existing flight quote", () => {
       ...quoteDetails,
       type: "Flight",
       seat_type: "economy",
-      origin: "Origin"
+      origin: "Origin",
+      ticket_type: "return"
     });
 
     editedQuote = {
       ...quoteDetails,
       type: "Flight",
       seat_type: "first class",
-      origin: "new origin"
+      origin: "new origin",
+      ticket_type: "one-way"
     };
   });
 
@@ -384,7 +388,8 @@ describe("SHOW: The user gets a single quote", () => {
       ...quoteDetails,
       type: "Flight",
       seat_type: "economy",
-      origin: "Origin"
+      origin: "Origin",
+      ticket_type: "return"
     });
     quoteJSON = quote.toObject();
     quoteJSON._id = quote._id.toString();
