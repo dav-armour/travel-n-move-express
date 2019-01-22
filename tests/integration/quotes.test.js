@@ -39,7 +39,7 @@ beforeAll(async () => {
     children: 2,
     flexible_dates: false,
     user,
-    clientComments: "comment"
+    client_comments: "comment"
   };
 });
 
