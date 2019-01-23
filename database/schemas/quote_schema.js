@@ -28,10 +28,10 @@ const QuoteSchema = new Schema(
       required: true
     },
     user: QuoteUserSchema,
-    clientComments: {
+    client_comments: {
       type: String
     },
-    agentComments: {
+    agent_comments: {
       type: String
     },
     status: {

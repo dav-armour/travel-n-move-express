@@ -28,8 +28,8 @@ module.exports = function validateQuote(req, res, next) {
           .email()
           .required()
       },
-      clientComments: Joi.string(),
-      agentComments: Joi.string(),
+      client_comments: Joi.string(),
+      agent_comments: Joi.string(),
       status: Joi.string().valid(
         "new",
         "researching",
