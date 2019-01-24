@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest tests --watch --coverage",
+    "test": "jest tests",
+    "test-dev": "jest tests --watch --coverage",
     "seeds": "node database/seeds",
     "dev-server": "nodemon index.js",
     "start": "forever -c \"nodemon --exitcrash -L\" index.js"
