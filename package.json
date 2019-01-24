@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest tests --watch --coverage",
+    "test": "jest tests",
+    "test-dev": "jest tests --watch --coverage",
     "seeds": "node database/seeds",
     "dev-server": "nodemon index.js",
     "start": "forever -c \"nodemon --exitcrash -L\" index.js"
@@ -16,9 +17,11 @@
     "cors": "^2.8.5",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
+    "forever": "^0.15.3",
     "jsonwebtoken": "^8.4.0",
     "mongoose": "^5.4.4",
     "morgan": "^1.9.1",
+    "nodemon": "^1.18.9",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
@@ -26,9 +29,7 @@
   },
   "devDependencies": {
     "faker": "^4.1.0",
-    "forever": "^0.15.3",
     "jest": "^23.6.0",
-    "nodemon": "^1.18.9",
     "supertest": "^3.4.1"
   }
 }
