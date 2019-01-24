@@ -48,8 +48,10 @@ describe("CREATE: The user creates a new tour", () => {
       title: "title",
       image: "image.png",
       price: 10000,
+      summary: "summary",
       description: "description",
-      duration: "7 days"
+      duration: "7 days",
+      featured: true
     };
   });
 
@@ -106,6 +108,7 @@ describe("DELETE: The user deletes an tour", () => {
       title: "delete",
       image: "delete.png",
       price: 1,
+      summary: "delete",
       description: "delete",
       duration: "delete"
     });
@@ -159,16 +162,20 @@ describe("UPDATE: A user edits an existing tour", () => {
       title: "edit me",
       image: "edit.png",
       price: 1,
+      summary: "edit summary",
       description: "edit description",
-      duration: "edit duration"
+      duration: "edit duration",
+      featured: true
     });
 
     editedTour = {
       title: "new title",
       image: "new.png",
       price: 100,
+      summary: "new summary",
       description: "new description",
-      duration: "new duration"
+      duration: "new duration",
+      featured: false
     };
   });
 
@@ -234,11 +241,13 @@ describe("UPDATE: A user edits an existing tour", () => {
 describe("SHOW: The user gets a single tour", () => {
   beforeEach(async () => {
     tour = await TourModel.create({
-      title: "edit me",
-      image: "edit.png",
+      title: "title",
+      image: "image.png",
       price: 1,
-      description: "edit description",
-      duration: "edit duration"
+      summary: "summary",
+      description: "description",
+      duration: "duration",
+      featured: true
     });
     tourJSON = tour.toObject();
     tourJSON._id = tour._id.toString();

@@ -10,6 +10,10 @@ const TourSchema = new Schema(
       type: String,
       required: true
     },
+    summary: {
+      type: String,
+      required: true
+    },
     description: {
       type: String,
       required: true
@@ -21,6 +25,9 @@ const TourSchema = new Schema(
     duration: {
       type: String,
       required: true
+    },
+    featured: {
+      type: Boolean
     }
   },
   {
