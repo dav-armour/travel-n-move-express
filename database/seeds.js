@@ -55,8 +55,10 @@ async function createTour() {
     title: faker.address.city(),
     image: faker.image.imageUrl(300, 300, "holiday"),
     price: Math.floor(Math.random() * 50000) + 10000,
+    summary: faker.lorem.words(10),
     description: faker.lorem.paragraphs(4),
-    duration: `${Math.floor(Math.random() * 14) + 1} days`
+    duration: `${Math.floor(Math.random() * 14) + 1} days`,
+    featured: faker.random.boolean()
   });
 
   return tour;
