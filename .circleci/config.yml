@@ -50,7 +50,7 @@ jobs:
       - run:
           name: Deploy to EB if branch is Master
           command: |
-            eb use travel-n-move --profile eb-cli
+            eb use travel-n-move --profile eb-cli --region ap-southeast-2
             eb deploy -v --staged --profile eb-cli
 workflows:
   version: 2
