@@ -10,6 +10,6 @@ router.use("/tours", TourRoutes);
 
 router.use("/quotes", QuoteRoutes);
 
-router.get("/", (req, res) => res.send("Welcome"));
+router.get("/", (req, res) => res.send("Welcome from AWS Beanstalk"));
 
 module.exports = router;
