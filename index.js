@@ -1,6 +1,6 @@
 require("dotenv").config();
 require("./database/connect");
-const HTTPError = require("./errors/HTTPerror");
+const HTTPError = require("./errors/HTTPError");
 const app = require("./app");
 const morgan = require("morgan");
 app.use(morgan("combined"));
