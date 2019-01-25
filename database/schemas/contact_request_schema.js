@@ -1,6 +1,6 @@
 const { Schema } = require("mongoose");
 
-const UserSchema = new Schema(
+const ContactRequest = new Schema(
   {
     first_name: {
       type: String,
@@ -31,3 +31,5 @@ const UserSchema = new Schema(
     timestamps: {}
   }
 );
+
+module.exports = ContactRequest;
