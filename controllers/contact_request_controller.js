@@ -9,6 +9,17 @@ async function index(req, res, next) {
   }
 }
 
-async function create(req, res, next) {}
+async function create(req, res, next) {
+  try {
+    request = await ContactRequestModel.create(req.body);
 
-module.exports = { index };
+    if (!request) {
+      return next(new HTTPError(422, "Could not create the request"));
+    }
+    return res.status(201).json({ request });
+  } catch (err) {
+    return next(new HTTPError(500, err.message));
+  }
+}
+
+module.exports = { index, create };

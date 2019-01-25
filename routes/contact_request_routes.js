@@ -5,6 +5,6 @@ const ContactRequestController = require("./../controllers/contact_request_contr
 
 router.get("/index", ContactRequestController.index);
 
-router.post("/", ContactRequestController.create);
+router.post("/create", ContactRequestController.create);
 
 module.exports = router;
