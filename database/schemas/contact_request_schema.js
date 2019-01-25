@@ -18,9 +18,13 @@ const ContactRequest = new Schema(
       type: String,
       required: true
     },
+    message: {
+      type: String,
+      required: true
+    },
     status: {
       type: String,
-      enum: ["New", "Pending", "Researching", "Closed"],
+      enum: ["new", "pending", "researching", "closed"],
       required: true
     },
     agent_comments: {
