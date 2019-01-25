@@ -22,4 +22,18 @@ async function create(req, res, next) {
   }
 }
 
-module.exports = { index, create };
+async function destroy(req, res, next) {
+  //deletes the resource
+  const { id } = req.params;
+  try {
+    const request = await ContactRequestModel.findByIdAndRemove(id);
+    if (!request) {
+      return next(new HTTPError(400, "Contact Request ID not found"));
+    }
+    return res.status(204).send();
+  } catch (err) {
+    return next(new HTTPError(500, err.message));
+  }
+}
+
+module.exports = { index, create, destroy };

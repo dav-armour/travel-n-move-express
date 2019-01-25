@@ -7,4 +7,6 @@ router.get("/index", ContactRequestController.index);
 
 router.post("/create", ContactRequestController.create);
 
+router.delete("/:id", ContactRequestController.destroy);
+
 module.exports = router;
