@@ -3,10 +3,12 @@ const TourModel = require("./models/tour_model");
 const FlightQuoteModel = require("./models/flight_quote_model");
 const HotelQuoteModel = require("./models/hotel_quote_model");
 const HolidayQuoteModel = require("./models/holiday_quote_model");
+const ContactRequestModel = require("./models/contact_request_model");
 const faker = require("faker");
 
 createSeeds()
   .then(() => console.log("Finished creating seeds"))
+  .catch(err => console.log(err))
   .finally(() => {
     mongoose.disconnect();
   });
@@ -15,11 +17,11 @@ async function createSeeds() {
   const promises = [];
   let tours = [];
   let users = [];
-  promises.push(createTours(), createQuoteUsers());
+  promises.push(createTours(), createQuoteUsers(), createContactRequests());
   await Promise.all(promises)
     .then(response => {
       [tours, users] = response;
-      console.log("Finished creating tours and users");
+      console.log("Finished creating tours and users and contacts");
     })
     .catch(err => console.log(err));
   await createQuotes({ tours, users })
@@ -181,4 +183,44 @@ async function createHolidayQuote(quoteDetails) {
   });
 
   return quote;
+}
+
+async function createContactRequest() {
+  const contact = await ContactRequestModel.create({
+    first_name: faker.name.firstName(),
+    last_name: faker.name.lastName(),
+    email: faker.internet.email(),
+    subject: faker.lorem.sentences(1),
+    message: faker.lorem.sentences(5),
+    status: faker.random.arrayElement([
+      "new",
+      "pending",
+      "researching",
+      "closed"
+    ]),
+    agent_comments: faker.random.boolean() ? faker.lorem.sentences(5) : ""
+  });
+  return contact;
+}
+
+async function createContactRequests(qty = 20) {
+  const contactsArray = [];
+  const contactPromises = [];
+  for (let i = 0; i < qty; i++) {
+    console.log(`Creating Contact Request ${i + 1}`);
+    contactPromises.push(createContactRequest());
+  }
+
+  await Promise.all(contactPromises)
+    .then(contacts => {
+      contactsArray.push(...contacts);
+      console.log(
+        `Contact request seeds successful, created ${contacts.length} contacts`
+      );
+    })
+    .catch(err => {
+      console.log(`Contact request seeds had an error: ${err}`);
+    });
+
+  return contactsArray;
 }
