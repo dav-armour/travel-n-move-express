@@ -3,11 +3,13 @@ const router = express.Router();
 const passport = require("./../config/passport");
 const validateTour = require("./../middleware/validation/tour_validation_middleware");
 const TourController = require("../controllers/tour_controller");
+const imageUpload = require("./../services/aws_service");
 
 router.get("/", TourController.index);
 
 router.post(
   "/",
+  imageUpload,
   validateTour(),
   passport.authenticate("jwt", { session: false }),
   TourController.create
