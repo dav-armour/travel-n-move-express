@@ -4,7 +4,7 @@ module.exports = function validateTour(req, res, next) {
   return celebrate({
     body: {
       title: Joi.string().required(),
-      image: Joi.string().required(),
+      image: Joi.string(),
       price: Joi.number()
         .integer()
         .positive()

@@ -90,9 +90,6 @@ async function update(req, res, next) {
       return next(new HTTPError(400, "Quote ID not found"));
     }
     quote = await QuoteModel.findById(id);
-    if (!quote) {
-      return next(new HTTPError(500, "Failed to find updated quote"));
-    }
     return res.json({ quote });
   } catch (err) {
     return next(new HTTPError(500, err.message));

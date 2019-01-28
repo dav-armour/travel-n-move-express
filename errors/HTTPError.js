@@ -7,6 +7,7 @@ class HTTPError extends Error {
     }
     this.name = "HTTPError";
     this.statusCode = statusCode;
+    this.message = message;
   }
 }
 

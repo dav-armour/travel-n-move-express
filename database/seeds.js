@@ -55,7 +55,7 @@ async function createTours(qty = 20) {
 async function createTour() {
   const tour = await TourModel.create({
     title: faker.address.city(),
-    image: faker.image.imageUrl(300, 300, "holiday"),
+    image: faker.image.nature(300, 300),
     price: Math.floor(Math.random() * 50000) + 10000,
     summary: faker.lorem.words(10),
     description: faker.lorem.paragraphs(4),
