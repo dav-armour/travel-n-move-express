@@ -42,7 +42,7 @@ function imageUpload(req, res, next) {
       const error = {
         message: "Validation Error",
         errors: {
-          image: "Image file missing"
+          image: '"image" is required'
         }
       };
       return next(new HTTPError(400, error));

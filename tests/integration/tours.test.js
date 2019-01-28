@@ -80,15 +80,15 @@ describe("CREATE: The user creates a new tour", () => {
     const response = await supertest(app)
       .post("/tours")
       .set("Authorization", `Bearer ${token}`)
+      .field("title", tour.title)
       .field("price", tour.price)
       .field("summary", tour.summary)
       .field("description", tour.description)
       .field("duration", tour.duration)
       .field("featured", tour.featured)
-      .attach("image", image)
       .expect(400);
     expect(response.body.message).toBe("Validation Error");
-    expect(response.body.errors.title).toBe('"title" is required');
+    expect(response.body.errors.image).toBe('"image" is required');
     const newTourCount = await TourModel.count();
     expect(newTourCount).toBe(tourCount);
   });
