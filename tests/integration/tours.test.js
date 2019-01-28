@@ -4,6 +4,7 @@ const mongoose = require("./../../database/connect");
 const TourModel = require("./../../database/models/tour_model");
 const UserModel = require("./../../database/models/user_model");
 const JWTService = require("./../../services/jwt_service");
+const { deleteImage } = require("./../../services/aws_service");
 
 let token;
 
@@ -71,6 +72,7 @@ describe("CREATE: The user creates a new tour", () => {
     expect(newTourCount).toBe(tourCount + 1);
     const foundTour = await TourModel.findOne({ title: tour.title }).lean();
     expect(foundTour).toMatchObject(tour);
+    deleteImage(foundTour.image);
   });
 
   test("POST /tours with invalid req body does not create tour and responds with error message", async () => {

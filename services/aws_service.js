@@ -1,6 +1,7 @@
 const multer = require("multer");
 const multerS3 = require("multer-s3");
 const aws = require("aws-sdk");
+require("dotenv").config();
 
 // configure the keys for accessing AWS
 aws.config.update({
@@ -35,6 +36,9 @@ function imageUpload(req, res, next) {
       });
     }
     if (!req.file) {
+      if (req.route.methods.put || req.route.methods.patch) {
+        return next();
+      }
       const error = {
         message: "Validation Error",
         errors: {
@@ -48,4 +52,24 @@ function imageUpload(req, res, next) {
   });
 }
 
-module.exports = imageUpload;
+function deleteImage(imageUrl) {
+  if (!imageUrl.match(/s3/)) {
+    return;
+  }
+  const Key = imageUrl
+    .split("/")
+    .slice(3)
+    .join("/");
+  var params = {
+    Bucket: process.env.S3_BUCKET_NAME,
+    Key
+  };
+  s3.deleteObject(params, function(err, data) {
+    if (err) throw err;
+  });
+}
+
+module.exports = {
+  imageUpload,
+  deleteImage
+};
