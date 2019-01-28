@@ -35,6 +35,10 @@ async function login(req, res, next) {
   }
 }
 
+// function dashboard(req, res) {
+//   return;
+// }
+
 module.exports = {
   register,
   login

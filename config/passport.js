@@ -17,8 +17,8 @@ passport.use(
       try {
         const user = await UserModel.findOne({ email });
 
-        if (!user || !user.verifyPasswordSync(password));
-        {
+        if (!user || !user.verifyPasswordSync(password)) {
+          return done(null, false);
         }
 
         return done(null, user);

@@ -32,4 +32,6 @@ router.post(
   AuthController.login
 );
 
+// router.get("/dashboard", AuthController.dashboard);
+
 module.exports = router;
