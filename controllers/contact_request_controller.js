@@ -11,12 +11,13 @@ async function index(req, res, next) {
 
 async function create(req, res, next) {
   try {
-    request = await ContactRequestModel.create(req.body);
+    console.log(req.body);
+    contactRequest = await ContactRequestModel.create(req.body);
 
-    if (!request) {
-      return next(new HTTPError(422, "Could not create the request"));
+    if (!contactRequest) {
+      return next(new HTTPError(422, "Could not create the contact request"));
     }
-    return res.status(201).json({ request });
+    return res.status(201).json({ contactRequest });
   } catch (err) {
     return next(new HTTPError(500, err.message));
   }
@@ -26,8 +27,8 @@ async function destroy(req, res, next) {
   //deletes the resource
   const { id } = req.params;
   try {
-    const request = await ContactRequestModel.findByIdAndRemove(id);
-    if (!request) {
+    const contactRequest = await ContactRequestModel.findByIdAndRemove(id);
+    if (!contactRequest) {
       return next(new HTTPError(400, "Contact Request ID not found"));
     }
     return res.status(204).send();
@@ -36,4 +37,36 @@ async function destroy(req, res, next) {
   }
 }
 
-module.exports = { index, create, destroy };
+//updating the record
+async function update(req, res, next) {
+  const { id } = req.params;
+
+  let contactRequest;
+  try {
+    contactRequest = await ContactRequestModel.findByIdAndUpdate(id, req.body);
+
+    if (!contactRequest) {
+      return next(new HTTPError(400, "Contact Request not found"));
+    }
+
+    return res.json({ contactRequest });
+  } catch (err) {
+    return next(new HTTPError(500, err.message));
+  }
+}
+
+async function show(req, res, next) {
+  //show a single resource
+  const { id } = req.params;
+  try {
+    const contactRequest = await ContactRequestModel.findById(id);
+    if (!contactRequest) {
+      return next(new HTTPError(400, "Contact Request not found"));
+    }
+    return res.json({ contactRequest });
+  } catch (err) {
+    return next(new HTTPError(500, err.message));
+  }
+}
+
+module.exports = { index, create, destroy, update, show };

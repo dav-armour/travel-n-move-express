@@ -5,7 +5,6 @@ const QuoteModel = require("./../../database/models/quote_model");
 const FlightQuoteModel = require("./../../database/models/flight_quote_model");
 const HotelQuoteModel = require("./../../database/models/hotel_quote_model");
 const HolidayQuoteModel = require("./../../database/models/holiday_quote_model");
-// const QuoteUserModel = require("./../../database/models/quote_user_model");
 const UserModel = require("./../../database/models/user_model");
 const HTTPError = require("./../../errors/HTTPError");
 const JWTService = require("./../../services/jwt_service");
