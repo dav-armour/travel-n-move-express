@@ -3,13 +3,12 @@ const app = require("./../../app");
 const mongoose = require("./../../database/connect");
 const TourModel = require("./../../database/models/tour_model");
 const UserModel = require("./../../database/models/user_model");
-const HTTPError = require("./../../errors/HTTPError");
 const JWTService = require("./../../services/jwt_service");
+const { deleteImage } = require("./../../services/aws_service");
 
 let token;
 
 beforeAll(async () => {
-  global.HTTPError = HTTPError;
   await UserModel.deleteOne({ email: "tour_admin@test.com" });
   await TourModel.deleteMany({});
   const admin = new UserModel({
@@ -42,11 +41,11 @@ describe("INDEX: The user gets all tours", () => {
 // CREATE
 describe("CREATE: The user creates a new tour", () => {
   let tour = {};
+  let image = `${__dirname}/../data/image.jpg`;
 
   beforeEach(() => {
     tour = {
       title: "title",
-      image: "image.png",
       price: 10000,
       summary: "summary",
       description: "description",
@@ -60,25 +59,36 @@ describe("CREATE: The user creates a new tour", () => {
     const response = await supertest(app)
       .post("/tours")
       .set("Authorization", `Bearer ${token}`)
-      .send(tour)
+      .field("title", tour.title)
+      .field("price", tour.price)
+      .field("summary", tour.summary)
+      .field("description", tour.description)
+      .field("duration", tour.duration)
+      .field("featured", tour.featured)
+      .attach("image", image)
       .expect(201);
     expect(response.body.tour.title).toEqual(tour.title);
     const newTourCount = await TourModel.count();
     expect(newTourCount).toBe(tourCount + 1);
     const foundTour = await TourModel.findOne({ title: tour.title }).lean();
     expect(foundTour).toMatchObject(tour);
+    deleteImage(foundTour.image);
   });
 
   test("POST /tours with invalid req body does not create tour and responds with error message", async () => {
-    delete tour.title;
     const tourCount = await TourModel.count();
     const response = await supertest(app)
       .post("/tours")
       .set("Authorization", `Bearer ${token}`)
-      .send(tour)
+      .field("title", tour.title)
+      .field("price", tour.price)
+      .field("summary", tour.summary)
+      .field("description", tour.description)
+      .field("duration", tour.duration)
+      .field("featured", tour.featured)
       .expect(400);
     expect(response.body.message).toBe("Validation Error");
-    expect(response.body.errors.title).toBe('"title" is required');
+    expect(response.body.errors.image).toBe('"image" is required');
     const newTourCount = await TourModel.count();
     expect(newTourCount).toBe(tourCount);
   });
@@ -88,13 +98,25 @@ describe("CREATE: The user creates a new tour", () => {
     let response = await supertest(app)
       .post("/tours")
       .set("Authorization", "bad token")
-      .send(tour)
+      .field("title", tour.title)
+      .field("price", tour.price)
+      .field("summary", tour.summary)
+      .field("description", tour.description)
+      .field("duration", tour.duration)
+      .field("featured", tour.featured)
+      .attach("image", image)
       .expect(401);
     expect(response.body).toEqual({});
     // missing token
     response = await supertest(app)
       .post("/tours")
-      .send(tour)
+      .field("title", tour.title)
+      .field("price", tour.price)
+      .field("summary", tour.summary)
+      .field("description", tour.description)
+      .field("duration", tour.duration)
+      .field("featured", tour.featured)
+      .attach("image", image)
       .expect(401);
     expect(response.body).toEqual({});
   });
