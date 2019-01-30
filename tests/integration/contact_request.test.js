@@ -129,7 +129,6 @@ describe("DELETE: The admin deletes an enquiry", () => {
 });
 
 // SHOW: showing individual record when admin clicks on the grid
-//router.use("/enquiries", ContactRequestRoutes);
 describe("SHOW: The user gets a single enquiry", () => {
   let enquiryRequest = {};
   beforeEach(async () => {
@@ -147,14 +146,14 @@ describe("SHOW: The user gets a single enquiry", () => {
     expect(response.body).toEqual({ contactRequest: enquiryJSON });
   });
 
-  // test("GET /enquiries/:id with invalid id returns error", async () => {
-  //   let response = await supertest(app)
-  //     .get(`/enquiries/test`)
-  //     .expect(500);
+  test("GET /enquiries/:id with invalid id returns error", async () => {
+    let response = await supertest(app)
+      .get(`/enquiries/test`)
+      .expect(500);
 
-  //   response = await supertest(app)
-  //     .get(`/enquiries/ffffffffffffffffffffffff`)
-  //     .expect(400);
-  //   expect(response.text).toEqual("Contact Request not found");
-  // });
+    response = await supertest(app)
+      .get(`/enquiries/ffffffffffffffffffffffff`)
+      .expect(400);
+    expect(response.text).toEqual("Contact Request not found");
+  });
 });
