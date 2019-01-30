@@ -44,10 +44,12 @@ async function update(req, res, next) {
   let contactRequest;
   try {
     contactRequest = await ContactRequestModel.findByIdAndUpdate(id, req.body);
+    console.log("Updating test");
 
     if (!contactRequest) {
       return next(new HTTPError(400, "Contact Request not found"));
     }
+    contactRequest = await ContactRequestModel.findById(id);
 
     return res.json({ contactRequest });
   } catch (err) {

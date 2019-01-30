@@ -5,11 +5,7 @@ const validateContactRequest = require("./../middleware/validation/contact_reque
 
 router.get("/index", ContactRequestController.index);
 
-router.post(
-  "/create",
-  validateContactRequest(),
-  ContactRequestController.create
-);
+router.post("/", validateContactRequest(), ContactRequestController.create);
 
 router.delete("/:id", ContactRequestController.destroy);
 
