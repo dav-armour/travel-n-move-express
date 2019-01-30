@@ -92,8 +92,6 @@ async function createQuoteUser() {
     telephone: faker.phone.phoneNumber(),
     email: faker.internet.email()
   };
-  // await user.setPassword("testing123");
-  // await user.save();
   return user;
 }
 

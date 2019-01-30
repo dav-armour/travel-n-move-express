@@ -1,10 +1,10 @@
 const supertest = require("supertest");
-const app = require("./../../app");
-const mongoose = require("./../../database/connect");
-const TourModel = require("./../../database/models/tour_model");
-const UserModel = require("./../../database/models/user_model");
-const JWTService = require("./../../services/jwt_service");
-const { deleteImage } = require("./../../services/aws_service");
+const app = require("../../app");
+const mongoose = require("../../database/connect");
+const TourModel = require("../../database/models/tour_model");
+const UserModel = require("../../database/models/user_model");
+const JWTService = require("../../services/jwt_service");
+const { deleteImage } = require("../../services/aws_service");
 
 let token;
 
