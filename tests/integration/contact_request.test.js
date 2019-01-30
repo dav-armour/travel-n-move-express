@@ -127,3 +127,34 @@ describe("DELETE: The admin deletes an enquiry", () => {
     expect(response.text).toEqual("Contact Request ID not found");
   });
 });
+
+// SHOW: showing individual record when admin clicks on the grid
+//router.use("/enquiries", ContactRequestRoutes);
+describe("SHOW: The user gets a single enquiry", () => {
+  let enquiryRequest = {};
+  beforeEach(async () => {
+    enquiryRequest = await ContactRequestModel.create(enquiryDetails);
+    enquiryJSON = enquiryRequest.toObject();
+    enquiryJSON._id = enquiryRequest._id.toString();
+    enquiryJSON.createdAt = enquiryRequest.createdAt.toISOString();
+    enquiryJSON.updatedAt = enquiryRequest.updatedAt.toISOString();
+  });
+
+  test("GET /enquiries/:id responds with corresponding enquiry object", async () => {
+    const response = await supertest(app)
+      .get(`/enquiries/${enquiryRequest._id}`)
+      .expect(200);
+    expect(response.body).toEqual({ contactRequest: enquiryJSON });
+  });
+
+  // test("GET /enquiries/:id with invalid id returns error", async () => {
+  //   let response = await supertest(app)
+  //     .get(`/enquiries/test`)
+  //     .expect(500);
+
+  //   response = await supertest(app)
+  //     .get(`/enquiries/ffffffffffffffffffffffff`)
+  //     .expect(400);
+  //   expect(response.text).toEqual("Contact Request not found");
+  // });
+});
