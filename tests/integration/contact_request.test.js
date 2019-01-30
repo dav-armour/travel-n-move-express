@@ -124,6 +124,6 @@ describe("DELETE: The admin deletes an enquiry", () => {
     response = await supertest(app)
       .delete("/enquiries/ffffffffffffffffffffffff")
       .expect(400);
-    expect(response.text).toEqual("contactRequest ID not found");
+    expect(response.text).toEqual("Contact Request ID not found");
   });
 });
