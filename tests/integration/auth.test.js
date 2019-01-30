@@ -1,6 +1,6 @@
-const app = require("./../../app");
-const UserModel = require("./../../database/models/user_model");
-const mongoose = require("./../../database/connect");
+sconst app = require("../../app");
+const UserModel = require("../../database/models/user_model");
+const mongoose = require("../../database/connect");
 const supertest = require("supertest");
 
 //login tests

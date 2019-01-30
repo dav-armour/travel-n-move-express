@@ -11,7 +11,7 @@ router.use("/tours", TourRoutes);
 
 router.use("/quotes", QuoteRoutes);
 
-router.use("/contacts", ContactRequestRoutes);
+router.use("/enquiries", ContactRequestRoutes);
 
 router.get("/", (req, res) => res.send("Welcome from AWS Beanstalk Staging"));
 
