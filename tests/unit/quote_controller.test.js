@@ -58,13 +58,16 @@ describe("QuoteController", () => {
 
   describe("index()", () => {
     test("catches any errors and calls next with new HTTPError", async () => {
+      const req = {
+        query: {}
+      };
       error = new HTTPError(500, "test");
 
       QuoteModel.find = jest.fn().mockImplementation(() => {
         throw new Error("test");
       });
 
-      await QuoteController.index(null, null, next);
+      await QuoteController.index(req, null, next);
       expect(QuoteModel.find).toBeCalledTimes(1);
       expect(next).toHaveBeenLastCalledWith(error);
     });

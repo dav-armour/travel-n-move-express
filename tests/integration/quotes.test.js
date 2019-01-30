@@ -53,7 +53,7 @@ describe("INDEX: The admin gets all quotes", () => {
       .get("/quotes")
       .set("Authorization", `Bearer ${token}`)
       .expect(200);
-    expect(response.body).toEqual({ quotes: [] });
+    expect(response.body).toEqual({ quotes: [], total: 0 });
   });
   test("GET /quotes with invalid or missing token responds with unauthorized", async () => {
     // bad token
