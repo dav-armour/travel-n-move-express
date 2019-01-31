@@ -185,11 +185,11 @@ async function createHolidayQuote(quoteDetails) {
 
 async function createEnquiry() {
   const enquiry = await EnquiryModel.create({
-    first_name: faker.name.first_name(),
+    first_name: faker.name.firstName(),
     last_name: faker.name.lastName(),
     email: faker.internet.email(),
     subject: faker.lorem.sentences(1),
-    message: faker.lorem.sentences(5),
+    message: faker.lorem.paragraphs(4),
     status: faker.random.arrayElement([
       "new",
       "pending",
