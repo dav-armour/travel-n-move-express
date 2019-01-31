@@ -1,6 +1,6 @@
 const { Schema } = require("mongoose");
 
-const ContactRequest = new Schema(
+const Enquiry = new Schema(
   {
     first_name: {
       type: String,
@@ -36,4 +36,4 @@ const ContactRequest = new Schema(
   }
 );
 
-module.exports = ContactRequest;
+module.exports = Enquiry;
