@@ -1,8 +1,12 @@
 const EnquiryModel = require("./../database/models/enquiry_model");
 
 async function index(req, res, next) {
+  const { page, rowsPerPage } = req.query;
   try {
-    const enquiries = await EnquiryModel.find();
+    const enquiries = await EnquiryModel.find()
+      .sort({ updatedAt: -1 })
+      .skip(page * rowsPerPage)
+      .limit(rowsPerPage);
     return res.json({ enquiries });
   } catch (err) {
     return next(new HTTPError(500, err.message));

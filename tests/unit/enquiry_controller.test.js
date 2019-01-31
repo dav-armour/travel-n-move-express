@@ -40,13 +40,16 @@ describe("EnquiryController", () => {
 
   describe("index()", () => {
     test("catches any errors and calls next with new HTTPError", async () => {
+      const req = {
+        query: {}
+      };
       error = new HTTPError(500, "test");
 
       EnquiryModel.find = jest.fn().mockImplementation(() => {
         throw new Error("test");
       });
 
-      await EnquiryController.index(null, null, next);
+      await EnquiryController.index(req, null, next);
       expect(EnquiryModel.find).toBeCalledTimes(1);
       expect(next).toHaveBeenLastCalledWith(error);
     });
