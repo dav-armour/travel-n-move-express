@@ -3,7 +3,7 @@ const TourModel = require("./models/tour_model");
 const FlightQuoteModel = require("./models/flight_quote_model");
 const HotelQuoteModel = require("./models/hotel_quote_model");
 const HolidayQuoteModel = require("./models/holiday_quote_model");
-const ContactRequestModel = require("./models/contact_request_model");
+const EnquiryModel = require("./models/enquiry_model");
 const faker = require("faker");
 
 createSeeds()
@@ -17,11 +17,11 @@ async function createSeeds() {
   const promises = [];
   let tours = [];
   let users = [];
-  promises.push(createTours(), createQuoteUsers(), createContactRequests());
+  promises.push(createTours(), createQuoteUsers(), createEnquiries());
   await Promise.all(promises)
     .then(response => {
       [tours, users] = response;
-      console.log("Finished creating tours and users and contacts");
+      console.log("Finished creating tours and users and enquiries");
     })
     .catch(err => console.log(err));
   await createQuotes({ tours, users })
@@ -183,9 +183,9 @@ async function createHolidayQuote(quoteDetails) {
   return quote;
 }
 
-async function createContactRequest() {
-  const contact = await ContactRequestModel.create({
-    first_name: faker.name.firstName(),
+async function createEnquiry() {
+  const enquiry = await EnquiryModel.create({
+    first_name: faker.name.first_name(),
     last_name: faker.name.lastName(),
     email: faker.internet.email(),
     subject: faker.lorem.sentences(1),
@@ -198,27 +198,29 @@ async function createContactRequest() {
     ]),
     agent_comments: faker.random.boolean() ? faker.lorem.sentences(5) : ""
   });
-  return contact;
+  return enquiry;
 }
 
-async function createContactRequests(qty = 20) {
-  const contactsArray = [];
-  const contactPromises = [];
+async function createEnquiries(qty = 20) {
+  const enquiriesArray = [];
+  const enquiryPromises = [];
   for (let i = 0; i < qty; i++) {
-    console.log(`Creating Contact Request ${i + 1}`);
-    contactPromises.push(createContactRequest());
+    console.log(`Creating Enquiry ${i + 1}`);
+    enquiryPromises.push(createEnquiry());
   }
 
-  await Promise.all(contactPromises)
-    .then(contacts => {
-      contactsArray.push(...contacts);
+  await Promise.all(enquiryPromises)
+    .then(enquiries => {
+      enquiriesArray.push(...enquiries);
       console.log(
-        `Contact request seeds successful, created ${contacts.length} contacts`
+        `Contact request seeds successful, created ${
+          enquiries.length
+        } enquiries`
       );
     })
     .catch(err => {
       console.log(`Contact request seeds had an error: ${err}`);
     });
 
-  return contactsArray;
+  return enquiriesArray;
 }
