@@ -1,7 +1,6 @@
 const { celebrate, Joi } = require("celebrate");
-const HTTPError = require("./../../errors/HTTPError");
 
-module.exports = function validateContactRequest(req, res, next) {
+module.exports = function validateEnquiry(req, res, next) {
   return celebrate({
     body: {
       first_name: Joi.string().required(),

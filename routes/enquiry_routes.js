@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const passport = require("./../config/passport");
 const EnquiryController = require("./../controllers/enquiry_controller");
-const validateContactRequest = require("./../middleware/validation/contact_request_validation_middleware");
+const validateEnquiry = require("./../middleware/validation/enquiry_validation_middleware");
 
 router.get(
   "/",
@@ -10,7 +10,7 @@ router.get(
   EnquiryController.index
 );
 
-router.post("/", validateContactRequest(), EnquiryController.create);
+router.post("/", validateEnquiry(), EnquiryController.create);
 
 router.delete(
   "/:id",
@@ -21,14 +21,14 @@ router.delete(
 router.put(
   "/:id",
   passport.authenticate("jwt", { session: false }),
-  validateContactRequest(),
+  validateEnquiry(),
   EnquiryController.update
 );
 
 router.patch(
   "/:id",
   passport.authenticate("jwt", { session: false }),
-  validateContactRequest(),
+  validateEnquiry(),
   EnquiryController.update
 );
 
