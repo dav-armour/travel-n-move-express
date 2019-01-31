@@ -41,9 +41,24 @@ const enquiryDetails = {
 describe("INDEX: The user gets all enquiries", () => {
   test("GET /enquiries responds with array of enquiries", async () => {
     const response = await supertest(app)
-      .get("/enquiries/index")
+      .get("/enquiries")
+      .set("Authorization", `Bearer ${token}`)
       .expect(200);
     expect(response.body).toEqual({ enquiries: [] });
+  });
+
+  test("GET /enquiries with an invalid or missing auth token responds with unauthorized", async () => {
+    // bad token
+    let response = await supertest(app)
+      .get("/enquiries")
+      .set("Authorization", "bad token")
+      .expect(401);
+    expect(response.body).toEqual({});
+    // missing token
+    response = await supertest(app)
+      .get("/enquiries")
+      .expect(401);
+    expect(response.body).toEqual({});
   });
 });
 
@@ -211,6 +226,7 @@ describe("SHOW: The admin gets a single enquiry", () => {
   test("GET /enquiries/:id responds with corresponding enquiry object", async () => {
     const response = await supertest(app)
       .get(`/enquiries/${enquiry._id}`)
+      .set("Authorization", `Bearer ${token}`)
       .expect(200);
     expect(response.body).toEqual({ enquiry: enquiryJSON });
   });
@@ -218,11 +234,27 @@ describe("SHOW: The admin gets a single enquiry", () => {
   test("GET /enquiries/:id with invalid id returns error", async () => {
     let response = await supertest(app)
       .get(`/enquiries/test`)
+      .set("Authorization", `Bearer ${token}`)
       .expect(500);
 
     response = await supertest(app)
       .get(`/enquiries/ffffffffffffffffffffffff`)
+      .set("Authorization", `Bearer ${token}`)
       .expect(400);
     expect(response.text).toEqual("Enquiry not found");
+  });
+
+  test("GET /enquiries/:id with an invalid or missing auth token responds with unauthorized", async () => {
+    // bad token
+    let response = await supertest(app)
+      .get(`/enquiries/${enquiry._id}`)
+      .set("Authorization", "bad token")
+      .expect(401);
+    expect(response.body).toEqual({});
+    // missing token
+    response = await supertest(app)
+      .get(`/enquiries/${enquiry._id}`)
+      .expect(401);
+    expect(response.body).toEqual({});
   });
 });

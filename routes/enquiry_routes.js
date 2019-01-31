@@ -4,7 +4,11 @@ const passport = require("./../config/passport");
 const EnquiryController = require("./../controllers/enquiry_controller");
 const validateContactRequest = require("./../middleware/validation/contact_request_validation_middleware");
 
-router.get("/index", EnquiryController.index);
+router.get(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  EnquiryController.index
+);
 
 router.post("/", validateContactRequest(), EnquiryController.create);
 
@@ -28,6 +32,10 @@ router.patch(
   EnquiryController.update
 );
 
-router.get("/:id", EnquiryController.show);
+router.get(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  EnquiryController.show
+);
 
 module.exports = router;
