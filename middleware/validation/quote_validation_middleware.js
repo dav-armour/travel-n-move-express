@@ -1,9 +1,25 @@
 const { celebrate, Joi } = require("celebrate");
 const HTTPError = require("./../../errors/HTTPError");
 
-module.exports = function validateQuote(req, res, next) {
+function validateQuoteIndex(req, res, next) {
   return (req, res, next) => {
-    // console.log(req.body);
+    const JoiSchema = {
+      page: Joi.number()
+        .min(0)
+        .default(0),
+      rowsPerPage: Joi.number()
+        .min(5)
+        .max(25)
+        .default(5)
+    };
+    celebrate({
+      query: JoiSchema
+    })(req, res, next);
+  };
+}
+
+function validateQuote(req, res, next) {
+  return (req, res, next) => {
     const JoiSchema = {
       type: Joi.string()
         .valid("Flight", "Holiday", "Hotel")
@@ -72,4 +88,9 @@ module.exports = function validateQuote(req, res, next) {
       body: JoiSchema
     })(req, res, next);
   };
+}
+
+module.exports = {
+  validateQuote,
+  validateQuoteIndex
 };

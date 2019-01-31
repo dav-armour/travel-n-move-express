@@ -1,7 +1,23 @@
 const { celebrate, Joi } = require("celebrate");
-const HTTPError = require("./../../errors/HTTPError");
 
-module.exports = function validateContactRequest(req, res, next) {
+function validateEnquiryIndex(req, res, next) {
+  return (req, res, next) => {
+    const JoiSchema = {
+      page: Joi.number()
+        .min(0)
+        .default(0),
+      rowsPerPage: Joi.number()
+        .min(5)
+        .max(25)
+        .default(5)
+    };
+    celebrate({
+      query: JoiSchema
+    })(req, res, next);
+  };
+}
+
+function validateEnquiry(req, res, next) {
   return celebrate({
     body: {
       first_name: Joi.string().required(),
@@ -21,4 +37,9 @@ module.exports = function validateContactRequest(req, res, next) {
       agent_comments: Joi.string()
     }
   });
+}
+
+module.exports = {
+  validateEnquiry,
+  validateEnquiryIndex
 };

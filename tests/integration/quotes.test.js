@@ -1,12 +1,12 @@
 const supertest = require("supertest");
-const app = require("../../app");
-const mongoose = require("../../database/connect");
-const QuoteModel = require("../../database/models/quote_model");
-const FlightQuoteModel = require("../../database/models/flight_quote_model");
-const HotelQuoteModel = require("../../database/models/hotel_quote_model");
-const HolidayQuoteModel = require("../../database/models/holiday_quote_model");
-const UserModel = require("../../database/models/user_model");
-const JWTService = require("../../services/jwt_service");
+const app = require("./../../app");
+const mongoose = require("./../../database/connect");
+const QuoteModel = require("./../../database/models/quote_model");
+const FlightQuoteModel = require("./../../database/models/flight_quote_model");
+const HotelQuoteModel = require("./../../database/models/hotel_quote_model");
+const HolidayQuoteModel = require("./../../database/models/holiday_quote_model");
+const UserModel = require("./../../database/models/user_model");
+const JWTService = require("./../../services/jwt_service");
 
 let token, quoteDetails;
 
@@ -53,7 +53,7 @@ describe("INDEX: The admin gets all quotes", () => {
       .get("/quotes")
       .set("Authorization", `Bearer ${token}`)
       .expect(200);
-    expect(response.body).toEqual({ quotes: [] });
+    expect(response.body).toEqual({ quotes: [], total: 0 });
   });
   test("GET /quotes with invalid or missing token responds with unauthorized", async () => {
     // bad token

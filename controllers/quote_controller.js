@@ -31,9 +31,14 @@ async function create(req, res, next) {
 
 async function index(req, res, next) {
   //show a list of all the resources
+  const { page, rowsPerPage } = req.query;
   try {
-    const quotes = await QuoteModel.find();
-    return res.json({ quotes });
+    const quotes = await QuoteModel.find()
+      .sort({ updatedAt: -1 })
+      .skip(page * rowsPerPage)
+      .limit(rowsPerPage);
+    const total = await QuoteModel.count();
+    return res.json({ quotes, total });
   } catch (err) {
     return next(new HTTPError(500, err.message));
   }
