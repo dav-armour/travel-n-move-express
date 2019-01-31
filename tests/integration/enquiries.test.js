@@ -44,7 +44,7 @@ describe("INDEX: The user gets all enquiries", () => {
       .get("/enquiries")
       .set("Authorization", `Bearer ${token}`)
       .expect(200);
-    expect(response.body).toEqual({ enquiries: [] });
+    expect(response.body).toEqual({ enquiries: [], total: 0 });
   });
 
   test("GET /enquiries with an invalid or missing auth token responds with unauthorized", async () => {
