@@ -40,13 +40,17 @@ describe("TourController", () => {
 
   describe("index()", () => {
     test("catches any errors and calls next with new HTTPError", async () => {
+      const req = {
+        query: {}
+      };
+
       error = new HTTPError(500, "test");
 
       TourModel.find = jest.fn().mockImplementation(() => {
         throw new Error("test");
       });
 
-      await TourController.index(null, null, next);
+      await TourController.index(req, null, next);
       expect(TourModel.find).toBeCalledTimes(1);
       expect(next).toHaveBeenLastCalledWith(error);
     });

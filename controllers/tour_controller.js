@@ -13,12 +13,20 @@ async function create(req, res, next) {
     return next(new HTTPError(500, err.message));
   }
 }
-
 async function index(req, res, next) {
-  //show a list of all the resources
+  const { page, rowsPerPage, featured } = req.query;
   try {
-    const tours = await TourModel.find();
-    return res.json({ tours });
+    let tours;
+    if (featured) {
+      tours = await TourModel.find({ featured });
+    } else {
+      tours = await TourModel.find()
+        .sort({ updatedAt: -1 })
+        .skip(page * rowsPerPage)
+        .limit(rowsPerPage);
+    }
+    const total = await TourModel.count();
+    return res.json({ tours, total });
   } catch (err) {
     return next(new HTTPError(500, err.message));
   }
