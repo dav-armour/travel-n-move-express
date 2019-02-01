@@ -1,6 +1,24 @@
 const { celebrate, Joi } = require("celebrate");
 
-module.exports = function validateTour(req, res, next) {
+function validateTourIndex(req, res, next) {
+  return (req, res, next) => {
+    const JoiSchema = {
+      page: Joi.number()
+        .min(0)
+        .default(0),
+      rowsPerPage: Joi.number()
+        .min(0)
+        .max(25)
+        .default(0),
+      featured: Joi.boolean().default(false)
+    };
+    celebrate({
+      query: JoiSchema
+    })(req, res, next);
+  };
+}
+
+function validateTour(req, res, next) {
   return celebrate({
     body: {
       title: Joi.string().required(),
@@ -11,10 +29,15 @@ module.exports = function validateTour(req, res, next) {
         .required(),
       summary: Joi.string()
         .required()
-        .max(80),
+        .max(100),
       description: Joi.string().required(),
       duration: Joi.string().required(),
       featured: Joi.boolean()
     }
   });
+}
+
+module.exports = {
+  validateTour,
+  validateTourIndex
 };

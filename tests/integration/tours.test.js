@@ -34,7 +34,7 @@ describe("INDEX: The user gets all tours", () => {
     const response = await supertest(app)
       .get("/tours")
       .expect(200);
-    expect(response.body).toEqual({ tours: [] });
+    expect(response.body).toEqual({ tours: [], total: 0 });
   });
 });
 

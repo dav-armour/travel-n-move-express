@@ -1,11 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("./../config/passport");
-const validateTour = require("./../middleware/validation/tour_validation_middleware");
+const {
+  validateTour,
+  validateTourIndex
+} = require("./../middleware/validation/tour_validation_middleware");
 const TourController = require("../controllers/tour_controller");
 const { imageUpload } = require("./../services/aws_service");
 
-router.get("/", TourController.index);
+router.get("/", validateTourIndex(), TourController.index);
 
 router.post(
   "/",
