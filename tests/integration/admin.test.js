@@ -5,9 +5,9 @@ const UserModel = require("./../../database/models/user_model");
 const JWTService = require("./../../services/jwt_service");
 
 beforeAll(async () => {
-  await UserModel.deleteOne({ email: "admin@test.com" });
+  await UserModel.deleteOne({ email: "dashboard_admin@test.com" });
   const admin = new UserModel({
-    email: "enquiry_admin@test.com",
+    email: "dashboard_admin@test.com",
     telephone: "1234",
     first_name: "admin",
     last_name: "admin"
@@ -18,7 +18,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await UserModel.deleteOne({ email: "admin@test.com" });
+  await UserModel.deleteOne({ email: "dashboard_admin@test.com" });
   mongoose.disconnect();
 });
 
