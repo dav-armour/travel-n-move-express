@@ -25,7 +25,8 @@ const Enquiry = new Schema(
     status: {
       type: String,
       enum: ["new", "pending", "researching", "closed"],
-      required: true
+      required: true,
+      default: "new"
     },
     agent_comments: {
       type: String
