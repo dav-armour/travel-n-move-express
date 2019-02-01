@@ -35,6 +35,17 @@ describe("login tests", () => {
     expect(response.body.message).toBe("Validation Error");
   });
 
+  test("POST /auth/login with invalid credentials should return error", async () => {
+    const response = await supertest(app)
+      .post("/auth/login")
+      .send({
+        email: "error@error.com",
+        password: "error"
+      })
+      .expect(401);
+    expect(response.text).toEqual("Password or username is incorrect");
+  });
+
   test("POST /auth/login with valid email and password should return token", async () => {
     const response = await supertest(app)
       .post("/auth/login")
@@ -43,6 +54,6 @@ describe("login tests", () => {
         password: "test"
       });
     expect(200);
-    expect(response.body).toBeTruthy();
+    expect(response.body.token).toBeTruthy();
   });
 });

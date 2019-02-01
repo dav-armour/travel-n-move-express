@@ -60,7 +60,7 @@ async function createTour() {
     summary: faker.lorem.words(10),
     description: faker.lorem.paragraphs(4),
     duration: `${Math.floor(Math.random() * 14) + 1} days`,
-    featured: faker.random.boolean()
+    featured: Math.random() < 0.3
   });
 
   return tour;
@@ -128,7 +128,14 @@ async function createQuote({ tour, user }) {
     children: faker.random.number({ min: 0, max: 4 }),
     flexible_dates: faker.random.boolean(),
     user,
-    clientComments: faker.lorem.sentence(10)
+    clientComments: faker.lorem.sentence(10),
+    status: faker.random.arrayElement([
+      "new",
+      "pending",
+      "researching",
+      "finalized",
+      "declined"
+    ])
   };
   const type = faker.random.arrayElement(["Flight", "Hotel", "Holiday"]);
   let quote = {};

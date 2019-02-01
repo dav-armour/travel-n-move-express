@@ -29,7 +29,7 @@ async function login(req, res, next) {
       return next(new HTTPError(401, error.message));
     }
     const token = JWTService.createToken(user._id);
-    res.json(token);
+    res.json({ token });
   } catch (error) {
     return next(error);
   }
