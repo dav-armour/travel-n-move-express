@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const TourSchema = require("./../schemas/tour_schema");
 
 const emptyOverview = {
-  _id: null,
   featured: 0,
   total: 0,
   last_updated: null
@@ -48,6 +47,11 @@ const overviewPipeline = [
       last_updated: {
         $max: "$updatedAt"
       }
+    }
+  },
+  {
+    $project: {
+      _id: 0
     }
   }
 ];

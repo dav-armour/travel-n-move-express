@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const EnquirySchema = require("../schemas/enquiry_schema");
 
 const emptyOverview = {
-  _id: null,
   new: 0,
   researching: 0,
   pending: 0,
@@ -84,6 +83,11 @@ const overviewPipeline = [
       last_updated: {
         $max: "$updatedAt"
       }
+    }
+  },
+  {
+    $project: {
+      _id: 0
     }
   }
 ];
