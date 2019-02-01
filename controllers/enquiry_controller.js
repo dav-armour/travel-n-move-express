@@ -7,7 +7,8 @@ async function index(req, res, next) {
       .sort({ updatedAt: -1 })
       .skip(page * rowsPerPage)
       .limit(rowsPerPage);
-    return res.json({ enquiries });
+    const total = await EnquiryModel.count();
+    return res.json({ enquiries, total });
   } catch (err) {
     return next(new HTTPError(500, err.message));
   }
