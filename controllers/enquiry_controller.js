@@ -1,4 +1,5 @@
 const EnquiryModel = require("./../database/models/enquiry_model");
+const { sendEnquiryEmail } = require("./../services/sendgrid_service");
 
 async function index(req, res, next) {
   const { page, rowsPerPage } = req.query;
@@ -20,6 +21,7 @@ async function create(req, res, next) {
     if (!enquiry) {
       return next(new HTTPError(422, "Could not create the enquiry"));
     }
+    sendEnquiryEmail(enquiry);
     return res.status(201).json({ enquiry });
   } catch (err) {
     return next(new HTTPError(500, err.message));
