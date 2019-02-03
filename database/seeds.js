@@ -184,7 +184,7 @@ async function createHotelQuote(quoteDetails) {
 async function createHolidayQuote(quoteDetails) {
   const quote = await HolidayQuoteModel.create({
     ...quoteDetails,
-    budget_tier: faker.random.arrayElement(["budget", "mid-range", "luxury"])
+    budget: faker.random.arrayElement(["affordable", "premium", "luxury"])
   });
 
   return quote;

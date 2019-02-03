@@ -1,9 +1,9 @@
 const { Schema } = require("mongoose");
 
 const HolidayQuoteSchema = new Schema({
-  budget_tier: {
+  budget: {
     type: String,
-    enum: ["budget", "mid-range", "luxury"],
+    enum: ["affordable", "premium", "luxury"],
     required: true
   }
 });

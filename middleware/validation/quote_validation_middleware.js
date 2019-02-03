@@ -66,8 +66,8 @@ function validateQuote(req, res, next) {
         JoiSchema.ticket_type = Joi.string().valid("return", "one-way");
         break;
       case "Holiday":
-        JoiSchema.budget_tier = Joi.string()
-          .valid("budget", "mid-range", "luxury")
+        JoiSchema.budget = Joi.string()
+          .valid("affordable", "premium", "luxury")
           .required();
         break;
       case "Hotel":

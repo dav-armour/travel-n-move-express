@@ -160,7 +160,7 @@ describe("CREATE: The user creates a new holiday quote", () => {
     quote = {
       ...quoteDetails,
       type: "Holiday",
-      budget_tier: "mid-range"
+      budget: "premium"
     };
   });
 
@@ -180,14 +180,14 @@ describe("CREATE: The user creates a new holiday quote", () => {
   });
 
   test("POST /quotes with invalid req body does not create quote and responds with error message", async () => {
-    delete quote.budget_tier;
+    delete quote.budget;
     const quoteCount = await HolidayQuoteModel.count();
     const response = await supertest(app)
       .post("/quotes")
       .send(quote)
       .expect(400);
     expect(response.body.message).toBe("Validation Error");
-    expect(response.body.errors.budget_tier).toBe('"budget_tier" is required');
+    expect(response.body.errors.budget).toBe('"budget" is required');
     const newQuoteCount = await HolidayQuoteModel.count();
     expect(newQuoteCount).toBe(quoteCount);
   });
@@ -352,13 +352,13 @@ describe("UPDATE: A user edits an existing holiday quote", () => {
     quote = await HolidayQuoteModel.create({
       ...quoteDetails,
       type: "Holiday",
-      budget_tier: "mid-range"
+      budget: "premium"
     });
 
     editedQuote = {
       ...quoteDetails,
       type: "Holiday",
-      budget_tier: "luxury"
+      budget: "luxury"
     };
   });
 
@@ -374,7 +374,7 @@ describe("UPDATE: A user edits an existing holiday quote", () => {
     const foundQuote = await QuoteModel.findById(quote._id).lean();
     expect(foundQuote).toMatchObject(editedQuote);
     expect(response.body.quote._id).toEqual(quote._id.toString());
-    expect(response.body.quote.budget_tier).toEqual("luxury");
+    expect(response.body.quote.budget).toEqual("luxury");
   });
 });
 

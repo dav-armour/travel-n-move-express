@@ -2,6 +2,7 @@ const QuoteModel = require("./../database/models/quote_model");
 const FlightModel = require("./../database/models/flight_quote_model");
 const HotelModel = require("./../database/models/hotel_quote_model");
 const HolidayModel = require("./../database/models/holiday_quote_model");
+const { sendQuoteEmail } = require("./../services/sendgrid_service");
 
 async function create(req, res, next) {
   //logic for creating a resource
@@ -23,6 +24,7 @@ async function create(req, res, next) {
     if (!quote) {
       return next(new HTTPError(422, "Could not create quote"));
     }
+    sendQuoteEmail(req.body);
     return res.status(201).json({ quote });
   } catch (err) {
     return next(new HTTPError(500, err.message));
