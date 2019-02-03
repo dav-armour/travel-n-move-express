@@ -13,6 +13,7 @@ async function create(req, res, next) {
     return next(new HTTPError(500, err.message));
   }
 }
+
 async function index(req, res, next) {
   const { page, rowsPerPage, featured } = req.query;
   try {

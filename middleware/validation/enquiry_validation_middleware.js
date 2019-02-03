@@ -32,7 +32,7 @@ function validateEnquiry(req, res, next) {
         "researching",
         "pending",
         "finalized",
-        "declined"
+        "closed"
       ),
       agent_comments: Joi.string()
     }

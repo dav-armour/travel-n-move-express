@@ -17,7 +17,6 @@ async function index(req, res, next) {
 async function create(req, res, next) {
   try {
     enquiry = await EnquiryModel.create(req.body);
-
     if (!enquiry) {
       return next(new HTTPError(422, "Could not create the enquiry"));
     }
