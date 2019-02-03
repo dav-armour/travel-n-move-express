@@ -160,7 +160,7 @@ describe("CREATE: The user creates a new holiday quote", () => {
     quote = {
       ...quoteDetails,
       type: "Holiday",
-      budget: "mid-range"
+      budget: "premium"
     };
   });
 
@@ -352,7 +352,7 @@ describe("UPDATE: A user edits an existing holiday quote", () => {
     quote = await HolidayQuoteModel.create({
       ...quoteDetails,
       type: "Holiday",
-      budget: "mid-range"
+      budget: "premium"
     });
 
     editedQuote = {
