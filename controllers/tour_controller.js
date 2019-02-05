@@ -22,7 +22,7 @@ async function index(req, res, next) {
       tours = await TourModel.find({ featured });
     } else {
       tours = await TourModel.find()
-        .sort({ updatedAt: -1 })
+        .sort({ title: 1 })
         .skip(page * rowsPerPage)
         .limit(rowsPerPage);
     }
