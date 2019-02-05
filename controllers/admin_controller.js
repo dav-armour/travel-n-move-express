@@ -1,6 +1,8 @@
 const EnquiryModel = require("./../database/models/enquiry_model");
 const QuoteModel = require("./../database/models/quote_model");
 const TourModel = require("./../database/models/tour_model");
+const UserModel = require("./../database/models/user_model");
+const JWTService = require("./../services/jwt_service");
 
 async function overview(req, res, next) {
   try {
@@ -13,6 +15,26 @@ async function overview(req, res, next) {
   }
 }
 
+function createAdmin(req, res, next) {
+  const { email, password, first_name, last_name, telephone } = req.body;
+  const user = new UserModel({
+    email,
+    first_name,
+    last_name,
+    telephone
+  });
+
+  //saves and encrypts password
+  UserModel.register(user, password, (err, user) => {
+    if (err) {
+      return next(new HTTPError(500, err.message));
+    }
+    const token = JWTService.createToken(user);
+    return res.send(201).json(token);
+  });
+}
+
 module.exports = {
-  overview
+  overview,
+  createAdmin
 };

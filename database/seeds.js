@@ -53,13 +53,15 @@ async function createTours(qty = 20) {
 }
 
 async function createTour() {
+  const days = Math.floor(Math.random() * 14) + 1;
+  const description = createTourDescription(days);
   const tour = await TourModel.create({
     title: faker.address.city(),
     image: faker.image.nature(300, 300),
     price: Math.floor(Math.random() * 50000) + 10000,
     summary: faker.lorem.words(10),
-    description: faker.lorem.paragraphs(4),
-    duration: `${Math.floor(Math.random() * 14) + 1} days`,
+    description,
+    duration: `${days} days`,
     featured: Math.random() < 0.3
   });
 
@@ -230,4 +232,25 @@ async function createEnquiries(qty = 20) {
     });
 
   return enquiriesArray;
+}
+
+function createTourDescription(days) {
+  let output = `<h1>Tour Overview</h1> \
+    <p>${faker.lorem.sentences(20)}</p> \
+    <h2>Itinerary</h2>`;
+  for (let i = 0; i < days; i++) {
+    output += `<p>Day ${i + 1}: ${faker.lorem.sentence()}<p>`;
+  }
+  output += `<h2>Inclusions</h2> \
+  <ul><li>${faker.lorem.sentence()}</li> \
+  <li>${faker.lorem.sentence()}</li> \
+  <li>${faker.lorem.sentence()}</li> \
+  <li>${faker.lorem.sentence()}</li> \
+  <li>${faker.lorem.sentence()}</li></ul> \
+  <h2>Places you will see</h2> \
+  <p><img src="${faker.image.city(200, 200)}"><img src="${faker.image.nature(
+    200,
+    200
+  )}"></p>`;
+  return output;
 }

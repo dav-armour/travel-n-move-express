@@ -19,8 +19,8 @@ function validateTourIndex(req, res, next) {
 }
 
 function validateTour(req, res, next) {
-  return celebrate({
-    body: {
+  return (req, res, next) => {
+    const JoiSchema = {
       title: Joi.string().required(),
       image: Joi.string(),
       price: Joi.number()
@@ -33,8 +33,11 @@ function validateTour(req, res, next) {
       description: Joi.string().required(),
       duration: Joi.string().required(),
       featured: Joi.boolean()
-    }
-  });
+    };
+    celebrate({
+      body: JoiSchema
+    })(req, res, next);
+  };
 }
 
 module.exports = {

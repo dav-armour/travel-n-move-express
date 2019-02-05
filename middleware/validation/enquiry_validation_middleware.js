@@ -18,8 +18,8 @@ function validateEnquiryIndex(req, res, next) {
 }
 
 function validateEnquiry(req, res, next) {
-  return celebrate({
-    body: {
+  return (req, res, next) => {
+    const JoiSchema = {
       first_name: Joi.string().required(),
       last_name: Joi.string().required(),
       email: Joi.string()
@@ -35,8 +35,11 @@ function validateEnquiry(req, res, next) {
         "closed"
       ),
       agent_comments: Joi.string()
-    }
-  });
+    };
+    celebrate({
+      body: JoiSchema
+    })(req, res, next);
+  };
 }
 
 module.exports = {
