@@ -16,7 +16,7 @@ function sendEnquiryEmail({ first_name, last_name, email, subject, message }) {
       subject,
       message
     },
-    template_id: "d-fd57271731864d118c94988ad2c832e6"
+    template_id: "d-62c9844ec1eb44fd8f2c732bd824f17b"
   };
   sendEmail(messageDetails);
 }
@@ -35,7 +35,7 @@ function sendQuoteEmail({ user, start_date, end_date, ...otherDetails }) {
       }
     ],
     dynamic_template_data: data,
-    template_id: "d-1f02b88071e84d22ad6385a47f72ed19"
+    template_id: "d-52b281a0268346fdba8e30baf83827ef"
   };
   sendEmail(messageDetails);
 }
