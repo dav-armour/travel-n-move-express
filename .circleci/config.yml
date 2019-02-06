@@ -52,30 +52,30 @@ jobs:
           command: |
             eb use travel-n-move --profile eb-cli --region ap-southeast-2
             eb deploy -v --staged --profile eb-cli
-  deploy-staging:
-    docker:
-      - image: circleci/python:2.7
-    working_directory: ~/root
-    steps:
-      - checkout
-      - run:
-          name: Install awsebcli
-          command: |
-            sudo pip install awsebcli --upgrade
-      - run:
-          name: Create AWS credentials manually
-          command: |
-            mkdir ~/.aws
-            touch ~/.aws/config
-            chmod 600 ~/.aws/config
-            echo "[profile eb-cli]" > ~/.aws/config
-            echo "aws_access_key_id=$AWS_ACCESS_KEY_ID" >> ~/.aws/config
-            echo "aws_secret_access_key=$AWS_SECRET_ACCESS_KEY" >> ~/.aws/config
-      - run:
-          name: Deploy to EB if branch is Master
-          command: |
-            eb use travel-n-move-staging --profile eb-cli --region ap-southeast-2
-            eb deploy -v --staged --profile eb-cli
+  # deploy-staging:
+  #   docker:
+  #     - image: circleci/python:2.7
+  #   working_directory: ~/root
+  #   steps:
+  #     - checkout
+  #     - run:
+  #         name: Install awsebcli
+  #         command: |
+  #           sudo pip install awsebcli --upgrade
+  #     - run:
+  #         name: Create AWS credentials manually
+  #         command: |
+  #           mkdir ~/.aws
+  #           touch ~/.aws/config
+  #           chmod 600 ~/.aws/config
+  #           echo "[profile eb-cli]" > ~/.aws/config
+  #           echo "aws_access_key_id=$AWS_ACCESS_KEY_ID" >> ~/.aws/config
+  #           echo "aws_secret_access_key=$AWS_SECRET_ACCESS_KEY" >> ~/.aws/config
+  #     - run:
+  #         name: Deploy to EB if branch is Master
+  #         command: |
+  #           eb use travel-n-move-staging --profile eb-cli --region ap-southeast-2
+  #           eb deploy -v --staged --profile eb-cli
 workflows:
   version: 2
   build-deploy:
@@ -88,8 +88,8 @@ workflows:
             branches:
               only: master
       - deploy-staging:
-          requires:
-            - build
-          filters:
-            branches:
-              only: development
+          # requires:
+          #   - build
+          # filters:
+          #   branches:
+          #     only: development

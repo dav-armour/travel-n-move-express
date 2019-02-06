@@ -9,7 +9,7 @@ function validateAdminDetails(req, res, next) {
       password: Joi.string().required(),
       first_name: Joi.string().required(),
       last_name: Joi.string().required(),
-      telephone: Joi.number().required()
+      telephone: Joi.string().required()
     };
     celebrate({
       body: JoiSchema
