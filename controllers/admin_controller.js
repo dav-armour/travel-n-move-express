@@ -30,7 +30,7 @@ function createAdmin(req, res, next) {
       return next(new HTTPError(500, err.message));
     }
     const token = JWTService.createToken(user);
-    return res.send(201).json(token);
+    return res.status(201).json(token);
   });
 }
 
