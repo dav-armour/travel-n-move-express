@@ -31,6 +31,7 @@ function imageUpload(req, res, next) {
   const singleUpload = upload.single("image");
   singleUpload(req, res, err => {
     if (err) {
+      console.log(err);
       return res.status(422).send({
         errors: [{ title: "Image Upload Error", detail: err.message }]
       });
