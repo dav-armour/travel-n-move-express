@@ -2,9 +2,6 @@ const { isCelebrate } = require("celebrate");
 const { deleteImage } = require("./../services/aws_service");
 
 module.exports = function(err, req, res, next) {
-  if (err.statusCode === 422) {
-    console.log(err);
-  }
   if (err && err.name === "HTTPError") {
     return res.status(err.statusCode).send(err.message);
   }
