@@ -8,9 +8,10 @@ environment-defaults:
 global:
   application_name: travel-n-move
   default_ec2_keyname: null
-  default_platform: arn:aws:elasticbeanstalk:ap-southeast-2::platform/Node.js running
+  default_platform:
+    arn:aws:elasticbeanstalk:ap-southeast-1::platform/Node.js running
     on 64bit Amazon Linux/4.8.0
-  default_region: ap-southeast-2
+  default_region: ap-southeast-1
   include_git_submodules: true
   instance_profile: null
   platform_name: null
