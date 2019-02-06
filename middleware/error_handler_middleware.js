@@ -3,6 +3,9 @@ const { deleteImage } = require("./../services/aws_service");
 
 module.exports = function(err, req, res, next) {
   if (err && err.name === "HTTPError") {
+    if (err.statusCode === 422) {
+      console.log(err.message);
+    }
     return res.status(err.statusCode).send(err.message);
   }
 
