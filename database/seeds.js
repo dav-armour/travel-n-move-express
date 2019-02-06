@@ -3,10 +3,12 @@ const TourModel = require("./models/tour_model");
 const FlightQuoteModel = require("./models/flight_quote_model");
 const HotelQuoteModel = require("./models/hotel_quote_model");
 const HolidayQuoteModel = require("./models/holiday_quote_model");
+const EnquiryModel = require("./models/enquiry_model");
 const faker = require("faker");
 
 createSeeds()
   .then(() => console.log("Finished creating seeds"))
+  .catch(err => console.log(err))
   .finally(() => {
     mongoose.disconnect();
   });
@@ -15,11 +17,11 @@ async function createSeeds() {
   const promises = [];
   let tours = [];
   let users = [];
-  promises.push(createTours(), createQuoteUsers());
+  promises.push(createTours(), createQuoteUsers(), createEnquiries());
   await Promise.all(promises)
     .then(response => {
       [tours, users] = response;
-      console.log("Finished creating tours and users");
+      console.log("Finished creating tours and users and enquiries");
     })
     .catch(err => console.log(err));
   await createQuotes({ tours, users })
@@ -51,14 +53,16 @@ async function createTours(qty = 20) {
 }
 
 async function createTour() {
+  const days = Math.floor(Math.random() * 14) + 1;
+  const description = createTourDescription(days);
   const tour = await TourModel.create({
     title: faker.address.city(),
-    image: faker.image.imageUrl(300, 300, "holiday"),
+    image: faker.image.nature(300, 300),
     price: Math.floor(Math.random() * 50000) + 10000,
     summary: faker.lorem.words(10),
-    description: faker.lorem.paragraphs(4),
-    duration: `${Math.floor(Math.random() * 14) + 1} days`,
-    featured: faker.random.boolean()
+    description,
+    duration: `${days} days`,
+    featured: Math.random() < 0.3
   });
 
   return tour;
@@ -90,8 +94,6 @@ async function createQuoteUser() {
     telephone: faker.phone.phoneNumber(),
     email: faker.internet.email()
   };
-  // await user.setPassword("testing123");
-  // await user.save();
   return user;
 }
 
@@ -128,7 +130,14 @@ async function createQuote({ tour, user }) {
     children: faker.random.number({ min: 0, max: 4 }),
     flexible_dates: faker.random.boolean(),
     user,
-    clientComments: faker.lorem.sentence(10)
+    clientComments: faker.lorem.sentence(10),
+    status: faker.random.arrayElement([
+      "new",
+      "pending",
+      "researching",
+      "finalized",
+      "declined"
+    ])
   };
   const type = faker.random.arrayElement(["Flight", "Hotel", "Holiday"]);
   let quote = {};
@@ -177,8 +186,71 @@ async function createHotelQuote(quoteDetails) {
 async function createHolidayQuote(quoteDetails) {
   const quote = await HolidayQuoteModel.create({
     ...quoteDetails,
-    budget_tier: faker.random.arrayElement(["budget", "mid-range", "luxury"])
+    budget: faker.random.arrayElement(["affordable", "premium", "luxury"])
   });
 
   return quote;
+}
+
+async function createEnquiry() {
+  const enquiry = await EnquiryModel.create({
+    first_name: faker.name.firstName(),
+    last_name: faker.name.lastName(),
+    email: faker.internet.email(),
+    subject: faker.lorem.sentences(1),
+    message: faker.lorem.paragraphs(4),
+    status: faker.random.arrayElement([
+      "new",
+      "pending",
+      "researching",
+      "closed"
+    ]),
+    agent_comments: faker.random.boolean() ? faker.lorem.sentences(5) : ""
+  });
+  return enquiry;
+}
+
+async function createEnquiries(qty = 20) {
+  const enquiriesArray = [];
+  const enquiryPromises = [];
+  for (let i = 0; i < qty; i++) {
+    console.log(`Creating Enquiry ${i + 1}`);
+    enquiryPromises.push(createEnquiry());
+  }
+
+  await Promise.all(enquiryPromises)
+    .then(enquiries => {
+      enquiriesArray.push(...enquiries);
+      console.log(
+        `Contact request seeds successful, created ${
+          enquiries.length
+        } enquiries`
+      );
+    })
+    .catch(err => {
+      console.log(`Contact request seeds had an error: ${err}`);
+    });
+
+  return enquiriesArray;
+}
+
+function createTourDescription(days) {
+  let output = `<h1>Tour Overview</h1> \
+    <p>${faker.lorem.sentences(20)}</p> \
+    <h2>Itinerary</h2>`;
+  for (let i = 0; i < days; i++) {
+    output += `<p>Day ${i + 1}: ${faker.lorem.sentence()}<p>`;
+  }
+  output += `<h2>Inclusions</h2> \
+  <ul><li>${faker.lorem.sentence()}</li> \
+  <li>${faker.lorem.sentence()}</li> \
+  <li>${faker.lorem.sentence()}</li> \
+  <li>${faker.lorem.sentence()}</li> \
+  <li>${faker.lorem.sentence()}</li></ul> \
+  <h2>Places you will see</h2> \
+  <p><img src="${faker.image.city(200, 200)}"><img src="${faker.image.nature(
+    200,
+    200
+  )}"></p>`;
+  return output;
 }

@@ -2,6 +2,7 @@ const QuoteModel = require("./../database/models/quote_model");
 const FlightModel = require("./../database/models/flight_quote_model");
 const HotelModel = require("./../database/models/hotel_quote_model");
 const HolidayModel = require("./../database/models/holiday_quote_model");
+const { sendQuoteEmail } = require("./../services/sendgrid_service");
 
 async function create(req, res, next) {
   //logic for creating a resource
@@ -23,6 +24,7 @@ async function create(req, res, next) {
     if (!quote) {
       return next(new HTTPError(422, "Could not create quote"));
     }
+    sendQuoteEmail(req.body);
     return res.status(201).json({ quote });
   } catch (err) {
     return next(new HTTPError(500, err.message));
@@ -31,9 +33,14 @@ async function create(req, res, next) {
 
 async function index(req, res, next) {
   //show a list of all the resources
+  const { page, rowsPerPage } = req.query;
   try {
-    const quotes = await QuoteModel.find();
-    return res.json({ quotes });
+    const quotes = await QuoteModel.find()
+      .sort({ updatedAt: -1 })
+      .skip(page * rowsPerPage)
+      .limit(rowsPerPage);
+    const total = await QuoteModel.count();
+    return res.json({ quotes, total });
   } catch (err) {
     return next(new HTTPError(500, err.message));
   }
@@ -90,9 +97,6 @@ async function update(req, res, next) {
       return next(new HTTPError(400, "Quote ID not found"));
     }
     quote = await QuoteModel.findById(id);
-    if (!quote) {
-      return next(new HTTPError(500, "Failed to find updated quote"));
-    }
     return res.json({ quote });
   } catch (err) {
     return next(new HTTPError(500, err.message));

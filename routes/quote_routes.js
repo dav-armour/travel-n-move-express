@@ -1,12 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("./../config/passport");
-const validateQuote = require("./../middleware/validation/quote_validation_middleware");
+const {
+  validateQuote,
+  validateQuoteIndex
+} = require("./../middleware/validation/quote_validation_middleware");
 const QuoteController = require("../controllers/quote_controller");
 
 router.get(
   "/",
   passport.authenticate("jwt", { session: false }),
+  validateQuoteIndex(),
   QuoteController.index
 );
 
@@ -16,15 +20,15 @@ router.get("/:id", QuoteController.show);
 
 router.put(
   "/:id",
-  validateQuote(),
   passport.authenticate("jwt", { session: false }),
+  validateQuote(),
   QuoteController.update
 );
 
 router.patch(
   "/:id",
-  validateQuote(),
   passport.authenticate("jwt", { session: false }),
+  validateQuote(),
   QuoteController.update
 );
 

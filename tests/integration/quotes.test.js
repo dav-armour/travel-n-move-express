@@ -5,15 +5,12 @@ const QuoteModel = require("./../../database/models/quote_model");
 const FlightQuoteModel = require("./../../database/models/flight_quote_model");
 const HotelQuoteModel = require("./../../database/models/hotel_quote_model");
 const HolidayQuoteModel = require("./../../database/models/holiday_quote_model");
-// const QuoteUserModel = require("./../../database/models/quote_user_model");
 const UserModel = require("./../../database/models/user_model");
-const HTTPError = require("./../../errors/HTTPError");
 const JWTService = require("./../../services/jwt_service");
 
 let token, quoteDetails;
 
 beforeAll(async () => {
-  global.HTTPError = HTTPError;
   await UserModel.deleteOne({ email: "quote_admin@test.com" });
   await QuoteModel.deleteMany({});
   const admin = new UserModel({
@@ -56,7 +53,7 @@ describe("INDEX: The admin gets all quotes", () => {
       .get("/quotes")
       .set("Authorization", `Bearer ${token}`)
       .expect(200);
-    expect(response.body).toEqual({ quotes: [] });
+    expect(response.body).toEqual({ quotes: [], total: 0 });
   });
   test("GET /quotes with invalid or missing token responds with unauthorized", async () => {
     // bad token
@@ -163,7 +160,7 @@ describe("CREATE: The user creates a new holiday quote", () => {
     quote = {
       ...quoteDetails,
       type: "Holiday",
-      budget_tier: "mid-range"
+      budget: "premium"
     };
   });
 
@@ -183,14 +180,14 @@ describe("CREATE: The user creates a new holiday quote", () => {
   });
 
   test("POST /quotes with invalid req body does not create quote and responds with error message", async () => {
-    delete quote.budget_tier;
+    delete quote.budget;
     const quoteCount = await HolidayQuoteModel.count();
     const response = await supertest(app)
       .post("/quotes")
       .send(quote)
       .expect(400);
     expect(response.body.message).toBe("Validation Error");
-    expect(response.body.errors.budget_tier).toBe('"budget_tier" is required');
+    expect(response.body.errors.budget).toBe('"budget" is required');
     const newQuoteCount = await HolidayQuoteModel.count();
     expect(newQuoteCount).toBe(quoteCount);
   });
@@ -355,13 +352,13 @@ describe("UPDATE: A user edits an existing holiday quote", () => {
     quote = await HolidayQuoteModel.create({
       ...quoteDetails,
       type: "Holiday",
-      budget_tier: "mid-range"
+      budget: "premium"
     });
 
     editedQuote = {
       ...quoteDetails,
       type: "Holiday",
-      budget_tier: "luxury"
+      budget: "luxury"
     };
   });
 
@@ -377,7 +374,7 @@ describe("UPDATE: A user edits an existing holiday quote", () => {
     const foundQuote = await QuoteModel.findById(quote._id).lean();
     expect(foundQuote).toMatchObject(editedQuote);
     expect(response.body.quote._id).toEqual(quote._id.toString());
-    expect(response.body.quote.budget_tier).toEqual("luxury");
+    expect(response.body.quote.budget).toEqual("luxury");
   });
 });
 

@@ -1,17 +1,16 @@
 const mongoose = require("mongoose");
-const QuoteSchema = require("./../schemas/quote_schema");
+const EnquirySchema = require("../schemas/enquiry_schema");
 
 const emptyOverview = {
   new: 0,
   researching: 0,
   pending: 0,
-  finalized: 0,
-  declined: 0,
+  closed: 0,
   total: 0,
   last_updated: null
 };
 
-QuoteSchema.statics.overview = async function() {
+EnquirySchema.statics.overview = async function() {
   try {
     const result = await this.aggregate(overviewPipeline);
     return result[0] || emptyOverview;
@@ -20,7 +19,7 @@ QuoteSchema.statics.overview = async function() {
   }
 };
 
-const QuoteModel = mongoose.model("Quote", QuoteSchema);
+const EnquiryModel = mongoose.model("Enquiry", EnquirySchema);
 
 // Returns total number of each status, most recent update time and total count
 const overviewPipeline = [
@@ -67,22 +66,11 @@ const overviewPipeline = [
           ]
         }
       },
-      finalized: {
+      closed: {
         $sum: {
           $cond: [
             {
-              $eq: ["$status", "finalized"]
-            },
-            1,
-            0
-          ]
-        }
-      },
-      declined: {
-        $sum: {
-          $cond: [
-            {
-              $eq: ["$status", "declined"]
+              $eq: ["$status", "closed"]
             },
             1,
             0
@@ -104,4 +92,4 @@ const overviewPipeline = [
   }
 ];
 
-module.exports = QuoteModel;
+module.exports = EnquiryModel;

@@ -1,4 +1,5 @@
 const TourModel = require("../database/models/tour_model");
+const { deleteImage } = require("./../services/aws_service");
 
 async function create(req, res, next) {
   //logic for creating a resource
@@ -14,10 +15,19 @@ async function create(req, res, next) {
 }
 
 async function index(req, res, next) {
-  //show a list of all the resources
+  const { page, rowsPerPage, featured } = req.query;
   try {
-    const tours = await TourModel.find();
-    return res.json({ tours });
+    let tours;
+    if (featured) {
+      tours = await TourModel.find({ featured });
+    } else {
+      tours = await TourModel.find()
+        .sort({ title: 1 })
+        .skip(page * rowsPerPage)
+        .limit(rowsPerPage);
+    }
+    const total = await TourModel.count();
+    return res.json({ tours, total });
   } catch (err) {
     return next(new HTTPError(500, err.message));
   }
@@ -31,6 +41,7 @@ async function destroy(req, res, next) {
     if (!tour) {
       return next(new HTTPError(400, "Tour ID not found"));
     }
+    deleteImage(tour.image);
     return res.status(204).send();
   } catch (err) {
     return next(new HTTPError(500, err.message));
@@ -54,16 +65,15 @@ async function show(req, res, next) {
 async function update(req, res, next) {
   //updates the resource
   const { id } = req.params;
-
   try {
     let tour = await TourModel.findByIdAndUpdate(id, req.body);
     if (!tour) {
       return next(new HTTPError(400, "Tour ID not found"));
     }
-    tour = await TourModel.findById(id);
-    if (!tour) {
-      return next(new HTTPError(500, "Failed to find updated tour"));
+    if (req.body.image && tour.image !== req.body.image) {
+      deleteImage(tour.image);
     }
+    tour = await TourModel.findById(id);
     return res.json({ tour });
   } catch (err) {
     return next(new HTTPError(500, err.message));
