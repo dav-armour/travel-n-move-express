@@ -44,12 +44,12 @@ function sendEmail(messageDetails) {
   const message = {
     ...messageDetails,
     from: {
-      email: "dav.armour@gmail.com",
-      name: "David Armour"
+      email: "info@travelnmove.com",
+      name: "Deepak Sharma"
     },
     reply_to: {
-      email: "dav.armour@gmail.com",
-      name: "David Armour"
+      email: "info@travelnmove.com",
+      name: "Deepak Sharma"
     }
   };
   // Skip actually sending email for test running
